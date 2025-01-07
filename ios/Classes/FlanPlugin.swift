@@ -11,6 +11,10 @@ public class FlanPlugin: NSObject, FlutterPlugin {
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
+    case "getNotificationSettingsAsync":
+      Task {
+        await getNotificationSettingsAsync(call, result)
+      }
     case "requestAuthorizationAsync":
       Task {
         await requestAuthorizationAsync(call, result)
@@ -30,6 +34,12 @@ public class FlanPlugin: NSObject, FlutterPlugin {
     default:
       result(FlutterMethodNotImplemented)
     }
+  }
+
+  private func getNotificationSettingsAsync(_ call: FlutterMethodCall, _ result: @escaping FlutterResult) async {
+    let notificationCenter = UNUserNotificationCenter.current()
+    let settings = await notificationCenter.notificationSettings()
+    result(settings)
   }
 
   private func requestAuthorizationAsync(
@@ -199,8 +209,8 @@ public class FlanPlugin: NSObject, FlutterPlugin {
     let notificationCenter = UNUserNotificationCenter.current()
     let notificationRequests = await notificationCenter.pendingNotificationRequests()
 
-    let output = notificationRequests.map { request -> [String: Any] in
-      var requestMap = [
+    let output: [[String: Any]] = notificationRequests.map { request -> [String: Any] in
+      var requestMap: [String: Any] = [
         "id": request.identifier,
         "content": [
           "title": request.content.title,

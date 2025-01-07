@@ -9,7 +9,14 @@ class MethodChannelFlan extends PlatformInterface implements Flan {
   MethodChannelFlan({required super.token});
 
   @visibleForTesting
-  final methodChannel = const MethodChannel('flan');
+  final methodChannel = const MethodChannel('flan', JSONMethodCodec());
+
+  @override
+  Future getNotificationSettingsAsync() async {
+    var result =
+        await methodChannel.invokeMethod('getNotificationSettingsAsync');
+    print(result);
+  }
 
   @override
   Future<void> requestAuthorizationAsync(
@@ -17,9 +24,7 @@ class MethodChannelFlan extends PlatformInterface implements Flan {
   ) async {
     await methodChannel.invokeMethod(
       'requestAuthorizationAsync',
-      {
-        'options': options.map((e) => e.name).toList(),
-      },
+      {'options': options},
     );
   }
 

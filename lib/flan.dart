@@ -2,6 +2,8 @@ import 'package:flan/models/notification_authorization_options.dart';
 import 'package:flan/models/notification_content.dart';
 
 abstract interface class Flan {
+  Future getNotificationSettingsAsync();
+
   Future<void> requestAuthorizationAsync(
       List<NotificationAuthorizationOptions> options);
 

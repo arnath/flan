@@ -84,7 +84,6 @@ public class FlanPlugin: NSObject, FlutterPlugin {
       try await notificationCenter.requestAuthorization(options: options)
       result(nil)
     } catch {
-      NSLog("FLAN: Error requesting notification authorization: \(error.localizedDescription)")
       result(
         FlutterError(
           code: "UNNotificationError",
@@ -199,6 +198,7 @@ public class FlanPlugin: NSObject, FlutterPlugin {
   ) async {
     let notificationCenter = UNUserNotificationCenter.current()
     let notificationRequests = await notificationCenter.pendingNotificationRequests()
+
     let output = notificationRequests.map { request -> [String: Any] in
       var requestMap = [
         "id": request.identifier,

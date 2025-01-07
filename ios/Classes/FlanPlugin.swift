@@ -11,18 +11,18 @@ public class FlanPlugin: NSObject, FlutterPlugin {
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     let args = call.arguments as? [String: Any]
     switch call.method {
-      case "scheduleNotificationAsync":
-        await scheduleNotificationAsync(
-          id: args["id"],
-          content: args["content"],
-          schedule: args["schedule"],
-          result)
-      case "cancelNotificationAsync":
-        await cancelNotificationAsync(id: args["id"], result)
-      case "getScheduledNotificationsAsync":
-        await getScheduledNotificationsAsync(result)
-      default:
-        result(FlutterMethodNotImplemented)
+    case "scheduleNotificationAsync":
+      await scheduleNotificationAsync(
+        id: args["id"],
+        content: args["content"],
+        schedule: args["schedule"],
+        result)
+    case "cancelNotificationAsync":
+      await cancelNotificationAsync(id: args["id"], result)
+    case "getScheduledNotificationsAsync":
+      await getScheduledNotificationsAsync(result)
+    default:
+      result(FlutterMethodNotImplemented)
     }
   }
 
@@ -61,16 +61,18 @@ public class FlanPlugin: NSObject, FlutterPlugin {
     let notificationCenter = UNUserNotificationCenter.current()
     do {
       try await notificationCenter.add(request)
-      result(true)
+      result(nil)
     } catch error {
-      result(FlutterError(code: "UNNotificationError", message: error.localizedDescription, details: nil))
+      result(
+        FlutterError(code: "UNNotificationError", message: error.localizedDescription, details: nil)
+      )
     }
   }
 
   private func cancelNotificationAsync(id: String, result: @escaping FlutterResult) async {
     let notificationCenter = UNUserNotificationCenter.current()
     await notificationCenter.removePendingNotificationRequests(withIdentifiers: [id])
-    result(true)
+    result(nil)
   }
 
   private func getScheduledNotificationsAsync(result: @escaping FlutterResult) async {

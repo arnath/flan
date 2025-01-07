@@ -9,12 +9,12 @@ class MethodChannelFlan extends FlanPlatform {
   final methodChannel = const MethodChannel('flan');
 
   @override
-  Future<bool> scheduleNotificationAsync(
+  Future<void> scheduleNotificationAsync(
     String id,
     NotificationContent content,
     NotificationSchedule schedule,
   ) async {
-    bool? success = await methodChannel.invokeMethod<bool>(
+    await methodChannel.invokeMethod(
       'scheduleNotificationAsync',
       {
         'id': id,
@@ -22,7 +22,18 @@ class MethodChannelFlan extends FlanPlatform {
         'schedule': schedule.toJson(),
       },
     );
+  }
 
-    return success ?? false;
+  @override
+  Future<void> cancelNotificationAsync(String id) async {
+    await methodChannel.invokeMethod(
+      'cancelNotificationAsync',
+      {'id': id},
+    );
+  }
+
+  @override
+  Future<List<String>> getScheduledNotificationsAsync() async {
+    return await methodChannel.invokeMethod('getScheduledNotificationsAsync');
   }
 }

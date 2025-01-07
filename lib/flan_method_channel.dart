@@ -1,10 +1,13 @@
-import 'package:flan/flan_platform_interface.dart';
+import 'package:flan/flan.dart';
 import 'package:flan/models/notification_content.dart';
 import 'package:flan/models/notification_schedule.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-class MethodChannelFlan extends FlanPlatform {
+class MethodChannelFlan extends PlatformInterface implements Flan {
+  MethodChannelFlan({required super.token});
+
   @visibleForTesting
   final methodChannel = const MethodChannel('flan');
 

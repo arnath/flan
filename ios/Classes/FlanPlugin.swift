@@ -13,12 +13,12 @@ public class FlanPlugin: NSObject, FlutterPlugin {
     switch call.method {
     case "scheduleNotificationAsync":
       await scheduleNotificationAsync(
-        id: args["id"],
-        content: args["content"],
-        schedule: args["schedule"],
+        args["id"] as! String,
+        args["content"] as! [String: Any],
+        args["schedule"] as! [String: Any],
         result)
     case "cancelNotificationAsync":
-      await cancelNotificationAsync(id: args["id"], result)
+      await cancelNotificationAsync(args["id"] as! String, result)
     case "getScheduledNotificationsAsync":
       await getScheduledNotificationsAsync(result)
     default:
@@ -27,16 +27,16 @@ public class FlanPlugin: NSObject, FlutterPlugin {
   }
 
   private func scheduleNotificationAsync(
-    id: String,
-    content: [String: Any],
-    schedule: [String: Any],
-    result: @escaping FlutterResult
+    _ id: String,
+    _ content: [String: Any],
+    _ schedule: [String: Any],
+    _ result: @escaping FlutterResult
   ) async {
-    let notification = UNMutableNotificationContent()
+    var notification = UNMutableNotificationContent()
     notification.title = content["title"] as! String
     notification.body = content["body"] as! String
 
-    let dateComponents = DateComponents()
+    var dateComponents = DateComponents()
     dateComponents.calendar = Calendar.current
     dateComponents.timeZone = TimeZone.current
     dateComponents.year = schedule["year"] as? Int
@@ -69,13 +69,13 @@ public class FlanPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func cancelNotificationAsync(id: String, result: @escaping FlutterResult) async {
+  private func cancelNotificationAsync(_ id: String, _ result: @escaping FlutterResult) async {
     let notificationCenter = UNUserNotificationCenter.current()
     await notificationCenter.removePendingNotificationRequests(withIdentifiers: [id])
     result(nil)
   }
 
-  private func getScheduledNotificationsAsync(result: @escaping FlutterResult) async {
+  private func getScheduledNotificationsAsync(_ result: @escaping FlutterResult) async {
     let center = UNUserNotificationCenter.current()
     let requests = await center.pendingNotificationRequests()
     let identifiers = requests.map { $0.identifier }

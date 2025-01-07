@@ -1,5 +1,6 @@
 import Flutter
 import UIKit
+import UserNotifications
 
 public class FlanPlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
@@ -10,6 +11,10 @@ public class FlanPlugin: NSObject, FlutterPlugin {
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
+    case "requestAuthorizationAsync":
+      Task {
+        await requestAuthorizationAsync(call, result)
+      }
     case "scheduleNotificationAsync":
       Task {
         await scheduleNotificationAsync(call, result)
@@ -24,6 +29,63 @@ public class FlanPlugin: NSObject, FlutterPlugin {
       }
     default:
       result(FlutterMethodNotImplemented)
+    }
+  }
+
+  private func requestAuthorizationAsync(_call: FlutterMethodCall, _result: @escaping FlutterResult)
+    async
+  {
+    guard let args = call.arguments as? [String: Any] else {
+      result(
+        FlutterError(
+          code: "InvalidArguments",
+          message: "Arguments are required and must be a valid dictionary.",
+          details: nil))
+      return
+    }
+
+    guard let optionsAsStrings = args["options"] as? [String] else {
+      result(
+        FlutterError(
+          code: "InvalidArguments",
+          message: "Required argument 'options' is missing or invalid.",
+          details: nil))
+      return
+    }
+
+    let options = optionsAsStrings.map { option in
+      switch option {
+      case "badge":
+        return .badge
+      case "sound":
+        return .sound
+      case "alert":
+        return .alert
+      case "criticalAlert":
+        return .criticalAlert
+      case "providesAppNotificationSettings":
+        return .providesAppNotificationSettings
+      case "provisional":
+        return .provisional
+      default:
+        result(
+          FlutterError(
+            code: "InvalidArguments",
+            message: "Invalid option '\(option)' provided in argument 'options'.",
+            details: nil))
+      }
+    }
+
+    let notificationCenter = UNUserNotificationCenter.current()
+    do {
+      try await notificationCenter.requestAuthorization(options: options)
+      result(nil)
+    } catch {
+      result(
+        FlutterError(
+          code: "UNNotificationError",
+          message: error.localizedDescription,
+          details: nil))
     }
   }
 
@@ -99,8 +161,10 @@ public class FlanPlugin: NSObject, FlutterPlugin {
       result(nil)
     } catch {
       result(
-        FlutterError(code: "UNNotificationError", message: error.localizedDescription, details: nil)
-      )
+        FlutterError(
+          code: "UNNotificationError",
+          message: error.localizedDescription,
+          details: nil))
     }
   }
 
@@ -132,9 +196,44 @@ public class FlanPlugin: NSObject, FlutterPlugin {
   private func getScheduledNotificationsAsync(
     _ call: FlutterMethodCall, _ result: @escaping FlutterResult
   ) async {
-    let center = UNUserNotificationCenter.current()
-    let requests = await center.pendingNotificationRequests()
-    let identifiers = requests.map { $0.identifier }
-    result(identifiers)
+    let notificationCenter = UNUserNotificationCenter.current()
+    let notificationRequests = await notificationCenter.pendingNotificationRequests()
+    let output = notificationRequests.map { request -> [String: Any] in
+      var requestMap = [
+        "id": request.identifier,
+        "content": [
+          "title": request.content.title,
+          "subtitle": request.content.subtitle,
+          "body": request.content.body,
+        ],
+      ]
+
+      guard let schedule = request.trigger as? UNCalendarNotificationTrigger else {
+        result(
+          FlutterError(
+            code: "InvalidState",
+            message:
+              "App has somehow scheduled a notification that doesn't have a calendar trigger.",
+            details: nil))
+        return
+      }
+
+      requestMap["schedule"] = [
+        "year": schedule.dateComponents.year,
+        "month": schedule.dateComponents.month,
+        "day": schedule.dateComponents.day,
+        "hour": schedule.dateComponents.hour,
+        "minute": schedule.dateComponents.minute,
+        "second": schedule.dateComponents.second,
+        "weekOfMonth": schedule.dateComponents.weekOfMonth,
+        "weekOfYear": schedule.dateComponents.weekOfYear,
+        "weekday": schedule.dateComponents.weekday,
+        "repeats": schedule.repeats,
+      ]
+
+      return result
+    }
+
+    result(results)
   }
 }

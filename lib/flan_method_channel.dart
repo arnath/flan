@@ -1,4 +1,5 @@
 import 'package:flan/flan.dart';
+import 'package:flan/models/notification_authorization_options.dart';
 import 'package:flan/models/notification_content.dart';
 import 'package:flan/models/notification_schedule.dart';
 import 'package:flutter/foundation.dart';
@@ -12,6 +13,18 @@ class MethodChannelFlan extends PlatformInterface implements Flan {
   final methodChannel = const MethodChannel('flan');
 
   @override
+  Future<void> requestAuthorizationAsync(
+    Set<NotificationAuthorizationOptions> options,
+  ) async {
+    await methodChannel.invokeMethod(
+      'requestAuthorizationAsync',
+      {
+        'options': options.map((e) => e.name).toList(),
+      },
+    );
+  }
+
+  @override
   Future<void> scheduleNotificationAsync(
     String id,
     NotificationContent content,
@@ -21,8 +34,8 @@ class MethodChannelFlan extends PlatformInterface implements Flan {
       'scheduleNotificationAsync',
       {
         'id': id,
-        'content': content.toJson(),
-        'schedule': schedule.toJson(),
+        'content': content.toMap(),
+        'schedule': schedule.toMap(),
       },
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flan/flan.dart';
 import 'package:flan/flan_method_channel.dart';
+import 'package:flan/models/notification_authorization_options.dart';
 import 'package:flan/models/notification_content.dart';
 import 'package:flan/models/notification_schedule.dart';
 import 'package:flutter/material.dart';
@@ -32,31 +33,47 @@ class _FlanExampleAppState extends State<FlanExampleApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: OutlinedButton(
-            child: Text('Schedule notification in 10 seconds'),
-            onPressed: () async {
-              DateTime target = DateTime.now().add(Duration(seconds: 10));
-              NotificationSchedule schedule = NotificationSchedule(
-                year: target.year,
-                month: target.month,
-                day: target.day,
-                hour: target.hour,
-                minute: target.minute,
-                second: target.second,
-                repeats: false,
-              );
+          child: Column(
+            spacing: 8,
+            children: [
+              OutlinedButton(
+                child: Text('Request notification authorization'),
+                onPressed: () async {
+                  await GetIt.instance<Flan>().requestAuthorizationAsync(
+                    [
+                      NotificationAuthorizationOptions.provisional,
+                      NotificationAuthorizationOptions.alert,
+                    ],
+                  );
+                },
+              ),
+              OutlinedButton(
+                child: Text('Schedule notification in 10 seconds'),
+                onPressed: () async {
+                  DateTime target = DateTime.now().add(Duration(seconds: 10));
+                  NotificationSchedule schedule = NotificationSchedule(
+                    year: target.year,
+                    month: target.month,
+                    day: target.day,
+                    hour: target.hour,
+                    minute: target.minute,
+                    second: target.second,
+                    repeats: false,
+                  );
 
-              NotificationContent content = NotificationContent(
-                title: 'Example notification from Flan',
-                body: 'Hi from Flan!',
-              );
+                  NotificationContent content = NotificationContent(
+                    title: 'Example notification from Flan',
+                    body: 'Hi from Flan!',
+                  );
 
-              await GetIt.instance<Flan>().scheduleNotificationAsync(
-                KSUID.generate().asString,
-                content,
-                schedule,
-              );
-            },
+                  await GetIt.instance<Flan>().scheduleNotificationAsync(
+                    KSUID.generate().asString,
+                    content,
+                    schedule,
+                  );
+                },
+              ),
+            ],
           ),
         ),
       ),

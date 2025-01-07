@@ -1,0 +1,31 @@
+include: package:flutter_lints/flutter.yaml
+linter:
+  rules:
+    - cancel_subscriptions
+    - close_sinks
+    - unnecessary_statements
+    - always_declare_return_types
+    - always_put_required_named_parameters_first
+    - avoid_void_async
+    - avoid_types_on_closure_parameters
+    - prefer_single_quotes
+    - sort_constructors_first
+    - sort_unnamed_constructors_first
+    - unawaited_futures
+    - unnecessary_await_in_return
+    - unnecessary_breaks
+    - unnecessary_lambdas
+    - unnecessary_parenthesis
+    - use_enums
+    - use_named_constants
+    - use_is_even_rather_than_modulo
+    - use_string_buffers
+    - use_to_and_as_if_applicable
+    - sort_pub_dependencies
+    - secure_pubspec_urls
+    - avoid_relative_lib_imports
+    - directives_ordering
+    - prefer_collection_urls: false
+
+# Additional information about this file can be found at
+# https://dart.dev/guides/language/analysis-options

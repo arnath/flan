@@ -14,7 +14,7 @@ class MethodChannelFlan extends PlatformInterface implements Flan {
 
   @override
   Future<void> requestAuthorizationAsync(
-    Set<NotificationAuthorizationOptions> options,
+    List<NotificationAuthorizationOptions> options,
   ) async {
     await methodChannel.invokeMethod(
       'requestAuthorizationAsync',
@@ -49,7 +49,11 @@ class MethodChannelFlan extends PlatformInterface implements Flan {
   }
 
   @override
-  Future<List<String>> getScheduledNotificationsAsync() async {
-    return await methodChannel.invokeMethod('getScheduledNotificationsAsync');
+  Future<List<Map<String, dynamic>>> getScheduledNotificationsAsync() async {
+    var result = await methodChannel.invokeMethod<List<Map<String, dynamic>>>(
+      'getScheduledNotificationsAsync',
+    );
+
+    return result!;
   }
 }

@@ -20,6 +20,8 @@ class FlanExampleApp extends StatefulWidget {
 }
 
 class _FlanExampleAppState extends State<FlanExampleApp> {
+  static final Flan _flan = GetIt.instance<Flan>();
+
   @override
   void initState() {
     super.initState();
@@ -39,9 +41,8 @@ class _FlanExampleAppState extends State<FlanExampleApp> {
               OutlinedButton(
                 child: Text('Request notification authorization'),
                 onPressed: () async {
-                  await GetIt.instance<Flan>().requestAuthorizationAsync(
+                  await _flan.requestAuthorizationAsync(
                     [
-                      NotificationAuthorizationOptions.provisional,
                       NotificationAuthorizationOptions.alert,
                     ],
                   );
@@ -66,13 +67,19 @@ class _FlanExampleAppState extends State<FlanExampleApp> {
                     body: 'Hi from Flan!',
                   );
 
-                  await GetIt.instance<Flan>().scheduleNotificationAsync(
+                  await _flan.scheduleNotificationAsync(
                     KSUID.generate().asString,
                     content,
                     schedule,
                   );
                 },
               ),
+              OutlinedButton(
+                  child: Text('Print scheduled notifications'),
+                  onPressed: () async {
+                    var result = await _flan.getScheduledNotificationsAsync();
+                    print(result);
+                  })
             ],
           ),
         ),

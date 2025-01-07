@@ -14,5 +14,5 @@ abstract interface class Flan {
 
   Future<void> cancelNotificationAsync(String id);
 
-  Future<List<String>> getScheduledNotificationsAsync();
+  Future<List<Map<String, dynamic>>> getScheduledNotificationsAsync();
 }

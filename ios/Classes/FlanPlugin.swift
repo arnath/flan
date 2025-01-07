@@ -32,7 +32,9 @@ public class FlanPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func requestAuthorizationAsync(_call: FlutterMethodCall, _result: @escaping FlutterResult)
+  private func requestAuthorizationAsync(
+    _ call: FlutterMethodCall, _ result: @escaping FlutterResult
+  )
     async
   {
     guard let args = call.arguments as? [String: Any] else {
@@ -53,26 +55,27 @@ public class FlanPlugin: NSObject, FlutterPlugin {
       return
     }
 
-    let options = optionsAsStrings.map { option in
+    let options: UNAuthorizationOptions = optionsAsStrings.reduce([]) { partialOptions, option in
       switch option {
       case "badge":
-        return .badge
+        return partialOptions.union(.badge)
       case "sound":
-        return .sound
+        return partialOptions.union(.sound)
       case "alert":
-        return .alert
+        return partialOptions.union(.alert)
       case "criticalAlert":
-        return .criticalAlert
+        return partialOptions.union(.criticalAlert)
       case "providesAppNotificationSettings":
-        return .providesAppNotificationSettings
+        return partialOptions.union(.providesAppNotificationSettings)
       case "provisional":
-        return .provisional
+        return partialOptions.union(.provisional)
       default:
         result(
           FlutterError(
             code: "InvalidArguments",
             message: "Invalid option '\(option)' provided in argument 'options'.",
             details: nil))
+        return partialOptions  // Ignore invalid options
       }
     }
 
@@ -81,6 +84,7 @@ public class FlanPlugin: NSObject, FlutterPlugin {
       try await notificationCenter.requestAuthorization(options: options)
       result(nil)
     } catch {
+      NSLog("FLAN: Error requesting notification authorization: \(error.localizedDescription)")
       result(
         FlutterError(
           code: "UNNotificationError",
@@ -209,13 +213,9 @@ public class FlanPlugin: NSObject, FlutterPlugin {
       ]
 
       guard let schedule = request.trigger as? UNCalendarNotificationTrigger else {
-        result(
-          FlutterError(
-            code: "InvalidState",
-            message:
-              "App has somehow scheduled a notification that doesn't have a calendar trigger.",
-            details: nil))
-        return
+        // App has somehow scheduled a request that doesn't have a calendar trigger.
+        // This shouldn't happen.
+        return requestMap
       }
 
       requestMap["schedule"] = [
@@ -231,9 +231,9 @@ public class FlanPlugin: NSObject, FlutterPlugin {
         "repeats": schedule.repeats,
       ]
 
-      return result
+      return requestMap
     }
 
-    result(results)
+    result(output)
   }
 }

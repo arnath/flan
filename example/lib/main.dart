@@ -1,50 +1,27 @@
-import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
 import 'package:flan/flan.dart';
+import 'package:flan/flan_method_channel.dart';
+import 'package:flan/models/notification_content.dart';
+import 'package:flan/models/notification_schedule.dart';
+import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:ksuid/ksuid.dart';
 
 void main() {
-  runApp(const MyApp());
+  GetIt.instance.registerSingleton<Flan>(MethodChannelFlan(token: Object()));
+  runApp(const FlanExampleApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class FlanExampleApp extends StatefulWidget {
+  const FlanExampleApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<FlanExampleApp> createState() => _FlanExampleAppState();
 }
 
-class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-  final _flanPlugin = Flan();
-
+class _FlanExampleAppState extends State<FlanExampleApp> {
   @override
   void initState() {
     super.initState();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
-    try {
-      platformVersion =
-          await _flanPlugin.getPlatformVersion() ?? 'Unknown platform version';
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
   }
 
   @override
@@ -55,7 +32,32 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: OutlinedButton(
+            child: Text('Schedule notification in 10 seconds'),
+            onPressed: () async {
+              DateTime target = DateTime.now().add(Duration(seconds: 10));
+              NotificationSchedule schedule = NotificationSchedule(
+                year: target.year,
+                month: target.month,
+                day: target.day,
+                hour: target.hour,
+                minute: target.minute,
+                second: target.second,
+                repeats: false,
+              );
+
+              NotificationContent content = NotificationContent(
+                title: 'Example notification from Flan',
+                body: 'Hi from Flan!',
+              );
+
+              await GetIt.instance<Flan>().scheduleNotificationAsync(
+                KSUID.generate().asString,
+                content,
+                schedule,
+              );
+            },
+          ),
         ),
       ),
     );

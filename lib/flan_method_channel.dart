@@ -1,7 +1,6 @@
 import 'package:flan/flan.dart';
 import 'package:flan/models/notification_authorization_options.dart';
 import 'package:flan/models/notification_content.dart';
-import 'package:flan/models/notification_schedule.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -27,15 +26,17 @@ class MethodChannelFlan extends PlatformInterface implements Flan {
   @override
   Future<void> scheduleNotificationAsync(
     String id,
-    NotificationContent content,
-    NotificationSchedule schedule,
-  ) async {
+    DateTime target,
+    NotificationContent content, {
+    bool repeats = false,
+  }) async {
     await methodChannel.invokeMethod(
       'scheduleNotificationAsync',
       {
         'id': id,
         'content': content.toMap(),
-        'schedule': schedule.toMap(),
+        'targetEpochSeconds': target.millisecondsSinceEpoch / 1000,
+        'repeats': repeats,
       },
     );
   }

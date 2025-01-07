@@ -114,6 +114,15 @@ public class FlanPlugin: NSObject, FlutterPlugin {
       return
     }
 
+    guard let targetEpochSeconds = args["targetEpochSeconds"] as? Double else {
+      result(
+        FlutterError(
+          code: "InvalidArguments",
+          message: "Required argument 'targetEpochSeconds' is missing or invalid.",
+          details: nil))
+      return
+    }
+
     guard let content = args["content"] as? [String: Any] else {
       result(
         FlutterError(
@@ -123,11 +132,11 @@ public class FlanPlugin: NSObject, FlutterPlugin {
       return
     }
 
-    guard let schedule = args["schedule"] as? [String: Any] else {
+    guard let repeats = args["repeats"] as? Bool else {
       result(
         FlutterError(
           code: "InvalidArguments",
-          message: "Required argument 'schedule' is missing or invalid.",
+          message: "Required argument 'repeats' is missing or invalid.",
           details: nil))
       return
     }
@@ -136,21 +145,9 @@ public class FlanPlugin: NSObject, FlutterPlugin {
     notification.title = content["title"] as? String ?? ""
     notification.body = content["body"] as? String ?? ""
 
-    var dateComponents = DateComponents()
-    dateComponents.calendar = Calendar.current
-    dateComponents.timeZone = TimeZone.current
-    dateComponents.year = schedule["year"] as? Int
-    dateComponents.month = schedule["month"] as? Int
-    dateComponents.day = schedule["day"] as? Int
-    dateComponents.hour = schedule["hour"] as? Int
-    dateComponents.minute = schedule["minute"] as? Int
-    dateComponents.second = schedule["second"] as? Int
-    dateComponents.weekOfMonth = schedule["weekOfMonth"] as? Int
-    dateComponents.weekOfYear = schedule["weekOfYear"] as? Int
-    dateComponents.weekday = schedule["weekday"] as? Int
-
-    let repeats = schedule["repeats"] as? Bool ?? false
-
+    let targetDate = Date(timeIntervalSince1970: targetEpochSeconds)
+    let dateComponents = Calendar.current.dateComponents(
+      [.year, .month, .day, .hour, .minute, .second], from: targetDate)
     let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: repeats)
 
     let request = UNNotificationRequest(

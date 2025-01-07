@@ -1,6 +1,5 @@
 import 'package:flan/models/notification_authorization_options.dart';
 import 'package:flan/models/notification_content.dart';
-import 'package:flan/models/notification_schedule.dart';
 
 abstract interface class Flan {
   Future<void> requestAuthorizationAsync(
@@ -8,9 +7,10 @@ abstract interface class Flan {
 
   Future<void> scheduleNotificationAsync(
     String id,
-    NotificationContent content,
-    NotificationSchedule schedule,
-  );
+    DateTime target,
+    NotificationContent content, {
+    bool repeats = false,
+  });
 
   Future<void> cancelNotificationAsync(String id);
 

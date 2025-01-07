@@ -9,32 +9,66 @@ public class FlanPlugin: NSObject, FlutterPlugin {
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    let args = call.arguments as? [String: Any]
     switch call.method {
     case "scheduleNotificationAsync":
-      await scheduleNotificationAsync(
-        args["id"] as! String,
-        args["content"] as! [String: Any],
-        args["schedule"] as! [String: Any],
-        result)
+      Task {
+        await scheduleNotificationAsync(call, result)
+      }
     case "cancelNotificationAsync":
-      await cancelNotificationAsync(args["id"] as! String, result)
+      Task {
+        cancelNotificationAsync(call, result)
+      }
     case "getScheduledNotificationsAsync":
-      await getScheduledNotificationsAsync(result)
+      Task {
+        await getScheduledNotificationsAsync(call, result)
+      }
     default:
       result(FlutterMethodNotImplemented)
     }
   }
 
   private func scheduleNotificationAsync(
-    _ id: String,
-    _ content: [String: Any],
-    _ schedule: [String: Any],
-    _ result: @escaping FlutterResult
+    _ call: FlutterMethodCall, _ result: @escaping FlutterResult
   ) async {
-    var notification = UNMutableNotificationContent()
-    notification.title = content["title"] as! String
-    notification.body = content["body"] as! String
+    guard let args = call.arguments as? [String: Any] else {
+      result(
+        FlutterError(
+          code: "InvalidArguments",
+          message: "Arguments are required and must be a valid dictionary.",
+          details: nil))
+      return
+    }
+
+    guard let id = args["id"] as? String else {
+      result(
+        FlutterError(
+          code: "InvalidArguments",
+          message: "Required argument 'id' is missing or invalid.",
+          details: nil))
+      return
+    }
+
+    guard let content = args["content"] as? [String: Any] else {
+      result(
+        FlutterError(
+          code: "InvalidArguments",
+          message: "Required argument 'content' is missing or invalid.",
+          details: nil))
+      return
+    }
+
+    guard let schedule = args["schedule"] as? [String: Any] else {
+      result(
+        FlutterError(
+          code: "InvalidArguments",
+          message: "Required argument 'schedule' is missing or invalid.",
+          details: nil))
+      return
+    }
+
+    let notification = UNMutableNotificationContent()
+    notification.title = content["title"] as? String ?? ""
+    notification.body = content["body"] as? String ?? ""
 
     var dateComponents = DateComponents()
     dateComponents.calendar = Calendar.current
@@ -49,33 +83,55 @@ public class FlanPlugin: NSObject, FlutterPlugin {
     dateComponents.weekOfYear = schedule["weekOfYear"] as? Int
     dateComponents.weekday = schedule["weekday"] as? Int
 
-    let trigger = UNCalendarNotificationTrigger(
-      dateMatching: dateComponents,
-      repeats: schedule["repeats"] as! Bool)
+    let repeats = schedule["repeats"] as? Bool ?? false
+
+    let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: repeats)
 
     let request = UNNotificationRequest(
       identifier: id,
       content: notification,
-      trigger: trigger)
+      trigger: trigger
+    )
 
     let notificationCenter = UNUserNotificationCenter.current()
     do {
       try await notificationCenter.add(request)
       result(nil)
-    } catch error {
+    } catch {
       result(
         FlutterError(code: "UNNotificationError", message: error.localizedDescription, details: nil)
       )
     }
   }
 
-  private func cancelNotificationAsync(_ id: String, _ result: @escaping FlutterResult) async {
+  private func cancelNotificationAsync(_ call: FlutterMethodCall, _ result: @escaping FlutterResult)
+  {
+    guard let args = call.arguments as? [String: Any] else {
+      result(
+        FlutterError(
+          code: "InvalidArguments",
+          message: "Arguments are required and must be a valid dictionary.",
+          details: nil))
+      return
+    }
+
+    guard let id = args["id"] as? String else {
+      result(
+        FlutterError(
+          code: "InvalidArguments",
+          message: "Required argument 'id' is missing or invalid.",
+          details: nil))
+      return
+    }
+
     let notificationCenter = UNUserNotificationCenter.current()
-    await notificationCenter.removePendingNotificationRequests(withIdentifiers: [id])
+    notificationCenter.removePendingNotificationRequests(withIdentifiers: [id])
     result(nil)
   }
 
-  private func getScheduledNotificationsAsync(_ result: @escaping FlutterResult) async {
+  private func getScheduledNotificationsAsync(
+    _ call: FlutterMethodCall, _ result: @escaping FlutterResult
+  ) async {
     let center = UNUserNotificationCenter.current()
     let requests = await center.pendingNotificationRequests()
     let identifiers = requests.map { $0.identifier }

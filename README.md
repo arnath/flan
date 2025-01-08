@@ -3,7 +3,7 @@
 Flan is a local notifications plugin for Flutter. It allows sending system
 notifications.
 
-![A sample toast from Flan](https://github.com/arnath/flan/blob/main/sample_toast.png)
+<img src="https://github.com/arnath/flan/blob/main/sample_toast.png" alt="A sample toast from Flan" height="100" />
 
 Flan is currently very much in alpha and is something I wrote to support another
 project. As such, it only supports iOS and only allows scheduling notifications

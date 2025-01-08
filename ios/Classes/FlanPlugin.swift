@@ -14,10 +14,6 @@ public class FlanPlugin: NSObject, FlutterPlugin {
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     NSLog("FLAN: Received method call: \(call.method)")
     switch call.method {
-    case "getNotificationSettingsAsync":
-      Task {
-        await getNotificationSettingsAsync(call, result)
-      }
     case "requestAuthorizationAsync":
       Task {
         await requestAuthorizationAsync(call, result)
@@ -29,6 +25,10 @@ public class FlanPlugin: NSObject, FlutterPlugin {
     case "cancelNotificationAsync":
       Task {
         cancelNotificationAsync(call, result)
+      }
+    case "getNotificationSettingsAsync":
+      Task {
+        await getNotificationSettingsAsync(call, result)
       }
     case "getScheduledNotificationsAsync":
       Task {
@@ -44,24 +44,7 @@ public class FlanPlugin: NSObject, FlutterPlugin {
   ) async {
     let notificationCenter = UNUserNotificationCenter.current()
     let settings = await notificationCenter.notificationSettings()
-
-    var output: [String: Any] = [
-      "authorizationStatus": authorizationStatusToString(settings.authorizationStatus),
-      "notificationCenterSetting": notificationSettingToString(settings.notificationCenterSetting),
-      "lockScreenSetting": notificationSettingToString(settings.lockScreenSetting),
-      "carPlaySetting": notificationSettingToString(settings.carPlaySetting),
-      "alertSetting": notificationSettingToString(settings.alertSetting),
-      "badgeSetting": notificationSettingToString(settings.badgeSetting),
-      "soundSetting": notificationSettingToString(settings.soundSetting),
-      "criticalAlertSetting": notificationSettingToString(settings.criticalAlertSetting),
-      "announcementSetting": notificationSettingToString(settings.announcementSetting),
-      "scheduledDeliverySetting": notificationSettingToString(settings.scheduledDeliverySetting),
-      "timeSensitiveSetting": notificationSettingToString(settings.timeSensitiveSetting),
-      "alertStyle": alertStyleToString(settings.alertStyle),
-      "showPreviewsSetting": previewSettingToString(settings.showPreviewsSetting),
-      "providesAppNotificationSettings": settings.providesAppNotificationSettings,
-      "directMessagesSetting": notificationSettingToString(settings.directMessagesSetting),
-    ]
+    let output = Converter.notificationSettingsToMap(settings)
 
     result(output)
   }
@@ -232,43 +215,62 @@ public class FlanPlugin: NSObject, FlutterPlugin {
   ) async {
     let notificationCenter = UNUserNotificationCenter.current()
     let notificationRequests = await notificationCenter.pendingNotificationRequests()
-
-    let output: [[String: Any]] = notificationRequests.map { request -> [String: Any] in
-      var requestMap: [String: Any] = [
-        "id": request.identifier,
-        "content": [
-          "title": request.content.title,
-          "subtitle": request.content.subtitle,
-          "body": request.content.body,
-        ],
-      ]
-
-      guard let schedule = request.trigger as? UNCalendarNotificationTrigger else {
-        // App has somehow scheduled a request that doesn't have a calendar trigger.
-        // This shouldn't happen.
-        return requestMap
-      }
-
-      requestMap["schedule"] = [
-        "year": schedule.dateComponents.year,
-        "month": schedule.dateComponents.month,
-        "day": schedule.dateComponents.day,
-        "hour": schedule.dateComponents.hour,
-        "minute": schedule.dateComponents.minute,
-        "second": schedule.dateComponents.second,
-        "weekOfMonth": schedule.dateComponents.weekOfMonth,
-        "weekOfYear": schedule.dateComponents.weekOfYear,
-        "weekday": schedule.dateComponents.weekday,
-        "repeats": schedule.repeats,
-      ]
-
-      return requestMap
-    }
+    let output = notificationRequests.map { Converter.notificationRequestToMap($0) }
 
     result(output)
   }
 
-  private func previewSettingToString(_ previewSetting: UNShowPreviewsSetting) -> String {
+}
+
+public class Converter {
+  public static func notificationRequestToMap(_ request: UNNotificationRequest) -> [String: Any] {
+    var output = [
+      "id": request.identifier,
+      "content": [
+        "title": request.content.title,
+        "subtitle": request.content.subtitle,
+        "body": request.content.body,
+      ],
+    ]
+
+    guard let schedule = request.trigger as? UNCalendarNotificationTrigger else {
+      // App has somehow scheduled a request that doesn't have a calendar trigger.
+      // This shouldn't happen.
+      return output
+    }
+
+    guard let targetEpochSeconds = Calendar.current.date(from: schedule.dateComponents) else {
+      return output
+    }
+
+    output["targetEpochSeconds"] = targetEpochSeconds.timeIntervalSince1970
+    output["repeats"] = schedule.repeats
+
+    return output
+  }
+
+  public static func notificationSettingsToMap(_ settings: UNNotificationSettings) -> [String: Any]
+  {
+    var output: [String: Any] = [
+      "authorizationStatus": authorizationStatusToString(settings.authorizationStatus),
+      "notificationCenterSetting": notificationSettingToString(settings.notificationCenterSetting),
+      "lockScreenSetting": notificationSettingToString(settings.lockScreenSetting),
+      "carPlaySetting": notificationSettingToString(settings.carPlaySetting),
+      "alertSetting": notificationSettingToString(settings.alertSetting),
+      "badgeSetting": notificationSettingToString(settings.badgeSetting),
+      "soundSetting": notificationSettingToString(settings.soundSetting),
+      "criticalAlertSetting": notificationSettingToString(settings.criticalAlertSetting),
+      "announcementSetting": notificationSettingToString(settings.announcementSetting),
+      "scheduledDeliverySetting": notificationSettingToString(settings.scheduledDeliverySetting),
+      "timeSensitiveSetting": notificationSettingToString(settings.timeSensitiveSetting),
+      "alertStyle": alertStyleToString(settings.alertStyle),
+      "showPreviewsSetting": previewSettingToString(settings.showPreviewsSetting),
+      "providesAppNotificationSettings": settings.providesAppNotificationSettings,
+      "directMessagesSetting": notificationSettingToString(settings.directMessagesSetting),
+    ]
+  }
+
+  private static func previewSettingToString(_ previewSetting: UNShowPreviewsSetting) -> String {
     switch previewSetting {
     case .always:
       return "always"
@@ -276,10 +278,12 @@ public class FlanPlugin: NSObject, FlutterPlugin {
       return "whenAuthenticated"
     case .never:
       return "never"
+    @unknown default:
+      return "unknown"
     }
   }
 
-  private func alertStyleToString(_ alertStyle: UNAlertStyle) -> String {
+  private static func alertStyleToString(_ alertStyle: UNAlertStyle) -> String {
     switch alertStyle {
     case .none:
       return "none"
@@ -287,10 +291,12 @@ public class FlanPlugin: NSObject, FlutterPlugin {
       return "banner"
     case .alert:
       return "alert"
+    @unknown default:
+      return "unknown"
     }
   }
 
-  private func authorizationStatusToString(_ status: UNAuthorizationStatus) -> String {
+  private static func authorizationStatusToString(_ status: UNAuthorizationStatus) -> String {
     switch status {
     case .notDetermined:
       return "notDetermined"
@@ -302,10 +308,12 @@ public class FlanPlugin: NSObject, FlutterPlugin {
       return "provisional"
     case .ephemeral:
       return "ephemeral"
+    @unknown default:
+      return "unknown"
     }
   }
 
-  private func notificationSettingToString(_ setting: UNNotificationSetting) -> String {
+  private static func notificationSettingToString(_ setting: UNNotificationSetting) -> String {
     switch setting {
     case .enabled:
       return "enabled"
@@ -313,6 +321,8 @@ public class FlanPlugin: NSObject, FlutterPlugin {
       return "disabled"
     case .notSupported:
       return "notSupported"
+    @unknown default:
+      return "unknown"
     }
   }
 }

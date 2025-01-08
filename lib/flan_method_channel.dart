@@ -13,8 +13,10 @@ class MethodChannelFlan extends PlatformInterface implements Flan {
 
   @override
   Future<Map<String, dynamic>> getNotificationSettingsAsync() async {
-    var result = await methodChannel
-        .invokeMethod<dynamic>('getNotificationSettingsAsync');
+    var result = await methodChannel.invokeMethod(
+      'getNotificationSettingsAsync',
+    );
+
     return result!;
   }
 
@@ -56,10 +58,10 @@ class MethodChannelFlan extends PlatformInterface implements Flan {
 
   @override
   Future<List<Map<String, dynamic>>> getScheduledNotificationsAsync() async {
-    List<Object?>? result = await methodChannel.invokeMethod<List<Object?>>(
+    var result = await methodChannel.invokeMethod(
       'getScheduledNotificationsAsync',
     );
 
-    return result!.map((e) => e as Map<String, dynamic>).toList();
+    return result!;
   }
 }

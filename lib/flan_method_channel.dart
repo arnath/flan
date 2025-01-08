@@ -49,10 +49,10 @@ class MethodChannelFlan extends PlatformInterface implements Flan {
   }
 
   @override
-  Future<void> cancelNotificationAsync(String id) async {
+  Future<void> cancelNotificationsAsync(Iterable<String> ids) async {
     await methodChannel.invokeMethod(
-      'cancelNotificationAsync',
-      {'id': id},
+      'cancelNotificationsAsync',
+      {'ids': ids.toList()},
     );
   }
 

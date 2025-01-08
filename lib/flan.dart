@@ -5,7 +5,8 @@ abstract interface class Flan {
   Future getNotificationSettingsAsync();
 
   Future<void> requestAuthorizationAsync(
-      List<NotificationAuthorizationOptions> options);
+    List<NotificationAuthorizationOptions> options,
+  );
 
   Future<void> scheduleNotificationAsync(
     String id,
@@ -14,7 +15,7 @@ abstract interface class Flan {
     bool repeats = false,
   });
 
-  Future<void> cancelNotificationAsync(String id);
+  Future<void> cancelNotificationsAsync(Iterable<String> ids);
 
   Future<List<Map<String, dynamic>>> getScheduledNotificationsAsync();
 }

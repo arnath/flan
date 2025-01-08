@@ -22,9 +22,9 @@ public class FlanPlugin: NSObject, FlutterPlugin {
       Task {
         await scheduleNotificationAsync(call, result)
       }
-    case "cancelNotificationAsync":
+    case "cancelNotificationsAsync":
       Task {
-        cancelNotificationAsync(call, result)
+        cancelNotificationsAsync(call, result)
       }
     case "getNotificationSettingsAsync":
       Task {
@@ -185,7 +185,7 @@ public class FlanPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func cancelNotificationAsync(_ call: FlutterMethodCall, _ result: @escaping FlutterResult)
+  private func cancelNotificationsAsync(_ call: FlutterMethodCall, _ result: @escaping FlutterResult)
   {
     guard let args = call.arguments as? [String: Any] else {
       result(
@@ -196,17 +196,17 @@ public class FlanPlugin: NSObject, FlutterPlugin {
       return
     }
 
-    guard let id = args["id"] as? String else {
+    guard let ids = args["ids"] as? [String] else {
       result(
         FlutterError(
           code: "InvalidArguments",
-          message: "Required argument 'id' is missing or invalid.",
+          message: "Required argument 'ids' is missing or invalid.",
           details: nil))
       return
     }
 
     let notificationCenter = UNUserNotificationCenter.current()
-    notificationCenter.removePendingNotificationRequests(withIdentifiers: [id])
+    notificationCenter.removePendingNotificationRequests(withIdentifiers: ids)
     result(nil)
   }
 

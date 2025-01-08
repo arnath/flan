@@ -224,7 +224,7 @@ public class FlanPlugin: NSObject, FlutterPlugin {
 
 public class Converter {
   public static func notificationRequestToMap(_ request: UNNotificationRequest) -> [String: Any] {
-    var output = [
+    var output: [String: Any] = [
       "id": request.identifier,
       "content": [
         "title": request.content.title,
@@ -268,6 +268,8 @@ public class Converter {
       "providesAppNotificationSettings": settings.providesAppNotificationSettings,
       "directMessagesSetting": notificationSettingToString(settings.directMessagesSetting),
     ]
+
+    return output
   }
 
   private static func previewSettingToString(_ previewSetting: UNShowPreviewsSetting) -> String {

@@ -65,10 +65,9 @@ class _FlanExampleAppState extends State<FlanExampleApp> {
                 },
               ),
               OutlinedButton(
-                  child: Text('Print scheduled notifications'),
+                  child: Text('Get notification settings'),
                   onPressed: () async {
-                    var result = await _flan.getScheduledNotificationsAsync();
-                    print(result);
+                    print(await _flan.getNotificationSettingsAsync());
                   })
             ],
           ),

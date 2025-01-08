@@ -10,6 +10,7 @@ public class FlanPlugin: NSObject, FlutterPlugin {
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    NSLog("FLAN: Received method call: \(call.method)")
     switch call.method {
     case "getNotificationSettingsAsync":
       Task {
@@ -36,10 +37,31 @@ public class FlanPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  private func getNotificationSettingsAsync(_ call: FlutterMethodCall, _ result: @escaping FlutterResult) async {
+  private func getNotificationSettingsAsync(
+    _ call: FlutterMethodCall, _ result: @escaping FlutterResult
+  ) async {
     let notificationCenter = UNUserNotificationCenter.current()
     let settings = await notificationCenter.notificationSettings()
-    result(settings)
+
+    var output: [String: Any] = [
+      "authorizationStatus": authorizationStatusToString(settings.authorizationStatus),
+      "notificationCenterSetting": notificationSettingToString(settings.notificationCenterSetting),
+      "lockScreenSetting": notificationSettingToString(settings.lockScreenSetting),
+      "carPlaySetting": notificationSettingToString(settings.carPlaySetting),
+      "alertSetting": notificationSettingToString(settings.alertSetting),
+      "badgeSetting": notificationSettingToString(settings.badgeSetting),
+      "soundSetting": notificationSettingToString(settings.soundSetting),
+      "criticalAlertSetting": notificationSettingToString(settings.criticalAlertSetting),
+      "announcementSetting": notificationSettingToString(settings.announcementSetting),
+      "scheduledDeliverySetting": notificationSettingToString(settings.scheduledDeliverySetting),
+      "timeSensitiveSetting": notificationSettingToString(settings.timeSensitiveSetting),
+      "alertStyle": alertStyleToString(settings.alertStyle),
+      "showPreviewsSetting": previewSettingToString(settings.showPreviewsSetting),
+      "providesAppNotificationSettings": settings.providesAppNotificationSettings,
+      "directMessagesSetting": notificationSettingToString(settings.directMessagesSetting),
+    ]
+
+    result(output)
   }
 
   private func requestAuthorizationAsync(
@@ -242,5 +264,53 @@ public class FlanPlugin: NSObject, FlutterPlugin {
     }
 
     result(output)
+  }
+
+  private func previewSettingToString(_ previewSetting: UNShowPreviewsSetting) -> String {
+    switch previewSetting {
+    case .always:
+      return "always"
+    case .whenAuthenticated:
+      return "whenAuthenticated"
+    case .never:
+      return "never"
+    }
+  }
+
+  private func alertStyleToString(_ alertStyle: UNAlertStyle) -> String {
+    switch alertStyle {
+    case .none:
+      return "none"
+    case .banner:
+      return "banner"
+    case .alert:
+      return "alert"
+    }
+  }
+
+  private func authorizationStatusToString(_ status: UNAuthorizationStatus) -> String {
+    switch status {
+    case .notDetermined:
+      return "notDetermined"
+    case .denied:
+      return "denied"
+    case .authorized:
+      return "authorized"
+    case .provisional:
+      return "provisional"
+    case .ephemeral:
+      return "ephemeral"
+    }
+  }
+
+  private func notificationSettingToString(_ setting: UNNotificationSetting) -> String {
+    switch setting {
+    case .enabled:
+      return "enabled"
+    case .disabled:
+      return "disabled"
+    case .notSupported:
+      return "notSupported"
+    }
   }
 }

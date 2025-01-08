@@ -4,7 +4,9 @@ import UserNotifications
 
 public class FlanPlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "flan", binaryMessenger: registrar.messenger())
+    let channel = FlutterMethodChannel(
+      name: "flan", binaryMessenger: registrar.messenger(),
+      codec: FlutterJSONMethodCodec.sharedInstance())
     let instance = FlanPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }

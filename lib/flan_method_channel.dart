@@ -1,5 +1,4 @@
 import 'package:flan/flan.dart';
-import 'package:flan/flan_method_codec.dart';
 import 'package:flan/models/notification_authorization_options.dart';
 import 'package:flan/models/notification_content.dart';
 import 'package:flutter/foundation.dart';
@@ -10,7 +9,7 @@ class MethodChannelFlan extends PlatformInterface implements Flan {
   MethodChannelFlan({required super.token});
 
   @visibleForTesting
-  final methodChannel = const MethodChannel('flan', FlanMethodCodec());
+  final methodChannel = const MethodChannel('flan', JSONMethodCodec());
 
   @override
   Future<Map<String, dynamic>> getNotificationSettingsAsync() async {

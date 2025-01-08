@@ -7,6 +7,10 @@ Flan is currently very much in alpha and is something I wrote to support another
 project. As such, it only supports iOS and only allows scheduling notifications
 with a calendar trigger.
 
+The example app mostly works. It will let you request permissions and add a
+notification. Note that iOS does not deliver toasts when your app is in the
+foreground.
+
 ## Installation
 
 ```shell

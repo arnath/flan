@@ -7,7 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:ksuid/ksuid.dart';
 
 void main() {
-  GetIt.instance.registerSingleton<Flan>(MethodChannelFlan(token: Object()));
+  GetIt.instance.registerSingleton<Flan>(FlanMethodChannel(token: Object()));
   runApp(const FlanExampleApp());
 }
 

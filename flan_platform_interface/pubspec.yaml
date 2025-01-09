@@ -1,0 +1,21 @@
+name: flan_platform_interface
+description: A common platform interface for the flan plugin.
+repository: https://github.com/arnath/flan
+# NOTE: We strongly prefer non-breaking changes, even at the expense of a
+# less-clean API. See https://flutter.dev/go/platform-interface-breaking-changes
+version: 0.2.0
+
+environment:
+  sdk: ^3.5.0
+  # Flutter versions prior to 3.7 did not support the
+  # sharedDarwinSource option.
+  flutter: ">=3.7.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  plugin_platform_interface: ^2.1.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter

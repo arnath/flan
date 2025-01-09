@@ -1,15 +1,15 @@
-import 'package:flan/flan.dart';
-import 'package:flan/models/notification_authorization_options.dart';
-import 'package:flan/models/notification_content.dart';
+import 'package:flan_platform_interface/src/flan_platform.dart';
+import 'package:flan_platform_interface/src/notification_authorization_options.dart';
+import 'package:flan_platform_interface/src/notification_content.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-class FlanMethodChannel extends PlatformInterface implements Flan {
-  FlanMethodChannel({required super.token});
-
+class FlanMethodChannelPlatform extends FlanPlatform {
   @visibleForTesting
-  final methodChannel = const MethodChannel('flan', JSONMethodCodec());
+  final methodChannel = const MethodChannel(
+    'dev.vijayp.flan',
+    JSONMethodCodec(),
+  );
 
   @override
   Future<Map<String, dynamic>> getNotificationSettingsAsync() async {

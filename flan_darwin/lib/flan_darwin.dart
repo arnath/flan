@@ -22,7 +22,7 @@ class FlanDarwin extends FlanPlatform {
   }
 
   @override
-  Future<Map<String, dynamic>> getNotificationSettingsAsync() {
+  Future<Map<String, String>> getNotificationSettingsAsync() {
     return _hostApi.getNotificationSettingsAsync();
   }
 

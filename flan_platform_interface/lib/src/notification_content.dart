@@ -12,8 +12,8 @@ class NotificationContent {
   final String? subtitle;
   final String? body;
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+  Map<String, Object?> toMap() {
+    return <String, Object?>{
       'title': title,
       'subtitle': subtitle,
       'body': body,

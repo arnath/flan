@@ -27,9 +27,9 @@ public class Converter {
     return output
   }
 
-  public static func notificationSettingsToMap(_ settings: UNNotificationSettings) -> [String: Any]
+  public static func notificationSettingsToMap(_ settings: UNNotificationSettings) -> [String: String]
   {
-    let output: [String: Any] = [
+    let output: [String: String] = [
       "authorizationStatus": authorizationStatusToString(settings.authorizationStatus),
       "notificationCenterSetting": notificationSettingToString(settings.notificationCenterSetting),
       "lockScreenSetting": notificationSettingToString(settings.lockScreenSetting),

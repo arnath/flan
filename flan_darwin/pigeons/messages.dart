@@ -12,7 +12,7 @@ import 'package:pigeon/pigeon.dart';
 @HostApi()
 abstract class FlanDarwinApi {
   @async
-  Map<String, dynamic> getNotificationSettingsAsync();
+  Map<String, String> getNotificationSettingsAsync();
 
   @async
   void requestAuthorizationAsync(
@@ -23,12 +23,12 @@ abstract class FlanDarwinApi {
   void scheduleNotificationAsync(
     String id,
     String targetTimestamp,
-    Map<String, dynamic> content,
+    Map<String, Object?> content,
     bool repeats,
   );
 
   void cancelNotifications(List<String> ids);
 
   @async
-  List<Map<String, dynamic>> getScheduledNotificationsAsync();
+  List<Map<String, Object?>> getScheduledNotificationsAsync();
 }

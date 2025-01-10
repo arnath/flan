@@ -54,7 +54,7 @@ class FlanDarwinApi {
 
   final String pigeonVar_messageChannelSuffix;
 
-  Future<Map<String, dynamic>> getNotificationSettingsAsync() async {
+  Future<Map<String, String>> getNotificationSettingsAsync() async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.flan_darwin.FlanDarwinApi.getNotificationSettingsAsync$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -77,7 +77,7 @@ class FlanDarwinApi {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (pigeonVar_replyList[0] as Map<Object?, Object?>?)!.cast<String, dynamic>();
+      return (pigeonVar_replyList[0] as Map<Object?, Object?>?)!.cast<String, String>();
     }
   }
 
@@ -103,7 +103,7 @@ class FlanDarwinApi {
     }
   }
 
-  Future<void> scheduleNotificationAsync(String id, String targetTimestamp, Map<String, dynamic> content, bool repeats) async {
+  Future<void> scheduleNotificationAsync(String id, String targetTimestamp, Map<String, Object?> content, bool repeats) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.flan_darwin.FlanDarwinApi.scheduleNotificationAsync$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -147,7 +147,7 @@ class FlanDarwinApi {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getScheduledNotificationsAsync() async {
+  Future<List<Map<String, Object?>>> getScheduledNotificationsAsync() async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.flan_darwin.FlanDarwinApi.getScheduledNotificationsAsync$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -170,7 +170,7 @@ class FlanDarwinApi {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (pigeonVar_replyList[0] as List<Object?>?)!.cast<Map<String, dynamic>>();
+      return (pigeonVar_replyList[0] as List<Object?>?)!.cast<Map<String, Object?>>();
     }
   }
 }

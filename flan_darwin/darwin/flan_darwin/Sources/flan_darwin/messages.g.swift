@@ -92,11 +92,11 @@ class MessagesPigeonCodec: FlutterStandardMessageCodec, @unchecked Sendable {
 ///
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol FlanDarwinApi {
-  func getNotificationSettingsAsync(completion: @escaping (Result<[String: dynamic], Error>) -> Void)
+  func getNotificationSettingsAsync(completion: @escaping (Result<[String: String], Error>) -> Void)
   func requestAuthorizationAsync(options: [String], completion: @escaping (Result<Void, Error>) -> Void)
-  func scheduleNotificationAsync(id: String, targetTimestamp: String, content: [String: dynamic], repeats: Bool, completion: @escaping (Result<Void, Error>) -> Void)
+  func scheduleNotificationAsync(id: String, targetTimestamp: String, content: [String: Any?], repeats: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func cancelNotifications(ids: [String]) throws
-  func getScheduledNotificationsAsync(completion: @escaping (Result<[[String: dynamic]], Error>) -> Void)
+  func getScheduledNotificationsAsync(completion: @escaping (Result<[[String: Any?]], Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -143,7 +143,7 @@ class FlanDarwinApiSetup {
         let args = message as! [Any?]
         let idArg = args[0] as! String
         let targetTimestampArg = args[1] as! String
-        let contentArg = args[2] as! [String: dynamic]
+        let contentArg = args[2] as! [String: Any?]
         let repeatsArg = args[3] as! Bool
         api.scheduleNotificationAsync(id: idArg, targetTimestamp: targetTimestampArg, content: contentArg, repeats: repeatsArg) { result in
           switch result {

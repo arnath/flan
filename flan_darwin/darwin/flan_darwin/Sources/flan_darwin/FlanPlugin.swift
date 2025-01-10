@@ -3,7 +3,12 @@ import UIKit
 import UserNotifications
 
 public final class FlanPlugin: NSObject, FlutterPlugin, FlanDarwinApi {
-  private let dateFormatter = ISO8601DateFormatter()
+  private let dateFormatter: ISO8601DateFormatter
+
+  init() {
+    dateFormatter = ISO8601DateFormatter()
+    dateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+  }
 
   public static func register(with registrar: FlutterPluginRegistrar) {
     let plugin = FlanPlugin()

@@ -4,7 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:ksuid/ksuid.dart';
 
 void main() {
-  GetIt.instance.registerSingleton<FlanPlatformApi>(FlanPlatformApi());
+  GetIt.instance.registerSingleton<FlanApi>(FlanPlatformApi());
   runApp(const FlanExampleApp());
 }
 
@@ -16,7 +16,7 @@ class FlanExampleApp extends StatefulWidget {
 }
 
 class _FlanExampleAppState extends State<FlanExampleApp> {
-  static final FlanPlatformApi _flan = GetIt.instance<FlanPlatformApi>();
+  static final FlanApi _flan = GetIt.instance<FlanApi>();
 
   @override
   void initState() {
@@ -28,7 +28,7 @@ class _FlanExampleAppState extends State<FlanExampleApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('Flan example app'),
         ),
         body: Center(
           child: Column(
@@ -62,10 +62,10 @@ class _FlanExampleAppState extends State<FlanExampleApp> {
                 },
               ),
               OutlinedButton(
-                  child: Text('Get notification settings'),
-                  onPressed: () async {
-                    print(await _flan.getNotificationSettingsAsync());
-                  })
+                child: Text('Print notification settings'),
+                onPressed: () async =>
+                    _flan.getNotificationSettingsAsync().then(print),
+              )
             ],
           ),
         ),

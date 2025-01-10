@@ -61,10 +61,10 @@ packages:
     dependency: "direct main"
     description:
       name: flan
-      sha256: "440426a29fd8e31b243c2ce25ad56f275bf24476ebfadb071f74798c073c6e2b"
+      sha256: "60484f48b1582f76f1eadd189f19cefa7f9c7f87744b6a0d404d76e682340246"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.7"
+    version: "0.2.8"
   flan_darwin:
     dependency: transitive
     description:

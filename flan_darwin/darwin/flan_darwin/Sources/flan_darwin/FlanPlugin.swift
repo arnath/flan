@@ -54,7 +54,7 @@ public final class FlanPlugin: NSObject, FlutterPlugin, FlanDarwinApi {
       } catch {
         completion(
           .failure(
-            FlutterError(
+            PigeonError(
               code: "UNNotificationError",
               message: error.localizedDescription,
               details: nil)))

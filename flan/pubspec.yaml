@@ -1,0 +1,23 @@
+name: flan
+description: Flutter plugin for sending local system-level notifications.
+repository: https://github.com/arnath/flan
+version: 0.2.0
+
+environment:
+  sdk: ^3.5.0
+  # Flutter versions prior to 3.7 did not support the
+  # sharedDarwinSource option.
+  flutter: ">=3.7.0"
+
+dependencies:
+  flan_platform_interface: ^0.2.1
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+topics:
+  - notification
+  - toast

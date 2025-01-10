@@ -1,24 +1,22 @@
 name: flan
-description: "Local notification plugin for Flutter"
-version: 0.1.0
+description: Flutter plugin for sending local notificaations.
+version: 0.3.0
 homepage: https://github.com/arnath/flan
 
 environment:
   sdk: ^3.6.0
-  flutter: '>=3.3.0'
+  flutter: '>=3.7.0'
 
 dependencies:
-  dart_mappable: ^4.3.0
   flutter:
     sdk: flutter
-  plugin_platform_interface: ^2.0.2
+  plugin_platform_interface: ^2.1.8
 
 dev_dependencies:
-  build_runner: ^2.4.14
-  dart_mappable_builder: ^4.3.0
   flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
+  pigeon: ^22.7.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

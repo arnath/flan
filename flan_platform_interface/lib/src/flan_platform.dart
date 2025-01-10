@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flan_platform_interface/src/flan_api.dart';
 import 'package:flan_platform_interface/src/flan_method_channel_platform.dart';
 import 'package:flan_platform_interface/src/notification_authorization_options.dart';
 import 'package:flan_platform_interface/src/notification_content.dart';
@@ -12,7 +13,7 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 /// (using `extends`) ensures that the subclass will get the default implementation, while
 /// platform implementations that `implements` this interface will be broken by newly added
 /// [FlanPlatform] methods.
-abstract class FlanPlatform extends PlatformInterface {
+abstract class FlanPlatform extends PlatformInterface implements FlanApi {
   /// Constructs a UrlLauncherPlatform.
   FlanPlatform() : super(token: _token);
 
@@ -32,18 +33,13 @@ abstract class FlanPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  /// Retrieves the current notification settings as a map of key-value pairs.
+  @override
   Future<Map<String, dynamic>> getNotificationSettingsAsync() =>
       throw UnimplementedError(
         'getNotificationSettingsAsync() has not been implemented.',
       );
 
-  /// Requests notification authorization from the user with specified options.
-  ///
-  /// [options] specifies the types of notifications the application wants to send.
-  /// Each option is an instance of [NotificationAuthorizationOptions]. Options must
-  /// not be specified more than once. If you request provisional access, access
-  /// is granted silently in the background.
+  @override
   Future<void> requestAuthorizationAsync(
     List<NotificationAuthorizationOptions> options,
   ) =>
@@ -51,12 +47,7 @@ abstract class FlanPlatform extends PlatformInterface {
         'requestAuthorizationAsync() has not been implemented.',
       );
 
-  /// Schedules a notification to be delivered at a specified [target] time.
-  ///
-  /// [id] is a unique identifier for the notification.
-  /// [target] specifies the delivery time for the notification.
-  /// [content] contains the details of the notification, such as title and body.
-  /// [repeats] indicates whether the notification should repeat. Defaults to `false`.
+  @override
   Future<void> scheduleNotificationAsync(
     String id,
     DateTime target,
@@ -67,19 +58,13 @@ abstract class FlanPlatform extends PlatformInterface {
         'scheduleNotificationAsync() has not been implemented.',
       );
 
-  /// Cancels notifications with the specified [ids].
-  ///
-  /// [ids] is an iterable containing the unique identifiers of the notifications
-  /// to be canceled.
+  @override
   Future<void> cancelNotificationsAsync(Iterable<String> ids) =>
       throw UnimplementedError(
         'cancelNotificationsAsync() has not been implemented.',
       );
 
-  /// Retrieves a list of all scheduled notifications.
-  ///
-  /// Returns a list of maps, where each map represents the details of a
-  /// scheduled notification.
+  @override
   Future<List<Map<String, dynamic>>> getScheduledNotificationsAsync() =>
       throw UnimplementedError(
         'getScheduledNotificationsAsync() has not been implemented.',

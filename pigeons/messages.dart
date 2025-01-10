@@ -60,8 +60,7 @@ abstract class FlanApi {
   ///
   /// [ids] is a list containing the unique identifiers of the notifications
   /// to be canceled.
-  @async
-  void cancelNotificationsAsync(List<String> ids);
+  void cancelNotifications(List<String> ids);
 
   /// Retrieves a list of all scheduled notifications.
   ///

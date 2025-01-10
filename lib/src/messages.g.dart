@@ -189,8 +189,8 @@ class FlanApi {
   ///
   /// [ids] is a list containing the unique identifiers of the notifications
   /// to be canceled.
-  Future<void> cancelNotificationsAsync(List<String> ids) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flan.FlanApi.cancelNotificationsAsync$pigeonVar_messageChannelSuffix';
+  Future<void> cancelNotifications(List<String> ids) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flan.FlanApi.cancelNotifications$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,

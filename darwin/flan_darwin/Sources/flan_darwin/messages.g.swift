@@ -169,7 +169,7 @@ protocol FlanApi {
   ///
   /// [ids] is a list containing the unique identifiers of the notifications
   /// to be canceled.
-  func cancelNotificationsAsync(ids: [String], completion: @escaping (Result<Void, Error>) -> Void)
+  func cancelNotifications(ids: [String]) throws
   /// Retrieves a list of all scheduled notifications.
   ///
   /// Returns a list of maps, where each map represents the details of a
@@ -251,22 +251,20 @@ class FlanApiSetup {
     ///
     /// [ids] is a list containing the unique identifiers of the notifications
     /// to be canceled.
-    let cancelNotificationsAsyncChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flan.FlanApi.cancelNotificationsAsync\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let cancelNotificationsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flan.FlanApi.cancelNotifications\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      cancelNotificationsAsyncChannel.setMessageHandler { message, reply in
+      cancelNotificationsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let idsArg = args[0] as! [String]
-        api.cancelNotificationsAsync(ids: idsArg) { result in
-          switch result {
-          case .success:
-            reply(wrapResult(nil))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
+        do {
+          try api.cancelNotifications(ids: idsArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
         }
       }
     } else {
-      cancelNotificationsAsyncChannel.setMessageHandler(nil)
+      cancelNotificationsChannel.setMessageHandler(nil)
     }
     /// Retrieves a list of all scheduled notifications.
     ///

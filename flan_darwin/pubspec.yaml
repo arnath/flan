@@ -1,5 +1,5 @@
-name: flan
-description: Flutter plugin for sending local system-level notifications.
+name: flan_darwin
+description: Shared Darwin (iOS/MacOS) implementation of the flan plugin.
 repository: https://github.com/arnath/flan
 version: 0.2.1
 
@@ -9,6 +9,14 @@ environment:
   # sharedDarwinSource option.
   flutter: ">=3.7.0"
 
+flutter:
+  plugin:
+    implements: flan
+    platforms:
+      ios:
+        pluginClass: FlanPlugin
+        dartPluginClass: FlanPluginDarwin
+
 dependencies:
   flan_platform_interface: ^0.2.1
   flutter:
@@ -17,7 +25,3 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-topics:
-  - notification
-  - toast

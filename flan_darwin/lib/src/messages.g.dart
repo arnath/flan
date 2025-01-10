@@ -104,7 +104,7 @@ class FlanDarwinApi {
     }
   }
 
-  Future<void> scheduleNotification(String id, double targetEpochSeconds, Map<String, Object?> content, bool repeats) async {
+  Future<void> scheduleNotification(String id, int targetEpochSeconds, Map<String, Object?> content, bool repeats) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.flan_darwin.FlanDarwinApi.scheduleNotification$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,

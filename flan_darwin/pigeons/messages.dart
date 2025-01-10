@@ -23,7 +23,7 @@ abstract class FlanDarwinApi {
   @async
   void scheduleNotification(
     String id,
-    double targetEpochSeconds,
+    int targetEpochSeconds,
     Map<String, Object?> content,
     bool repeats,
   );

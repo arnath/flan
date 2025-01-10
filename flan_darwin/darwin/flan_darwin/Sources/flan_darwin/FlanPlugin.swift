@@ -2,16 +2,16 @@ import Flutter
 import UIKit
 import UserNotifications
 
-public final class FlanPlugin: NSObject, FlutterPlugin, FlanApi {
+public final class FlanPlugin: NSObject, FlutterPlugin, FlanDarwinApi {
   private let dateFormatter = ISO8601DateFormatter()
 
   public static func register(with registrar: FlutterPluginRegistrar) {
     let plugin = FlanPlugin()
-    FlanApiSetup.setUp(binaryMessenger: registrar.messenger(), api: plugin)
+    FlanDarwinApiSetup.setUp(binaryMessenger: registrar.messenger(), api: plugin)
     registrar.publish(plugin)
   }
 
-  func getNotificationSettingsAsync(completion: @escaping (Result<[String: String], Error>) -> Void)
+  func getNotificationSettingsAsync(completion: @escaping (Result<[String: String], Error>) -> Void) async
   {
     let notificationCenter = UNUserNotificationCenter.current()
     let settings = await notificationCenter.notificationSettings()
@@ -20,7 +20,7 @@ public final class FlanPlugin: NSObject, FlutterPlugin, FlanApi {
 
   func requestAuthorizationAsync(
     options: [String], completion: @escaping (Result<Void, Error>) -> Void
-  ) {
+  ) async {
     let options: UNAuthorizationOptions = options.reduce([]) { partialOptions, option in
       switch option {
       case "badge":
@@ -37,7 +37,7 @@ public final class FlanPlugin: NSObject, FlutterPlugin, FlanApi {
         return partialOptions.union(.provisional)
       default:
         completion(
-          .error(
+          .failure(
             PigeonError(
               code: "InvalidArguments",
               message: "Invalid option '\(option)' provided in argument 'options'.",
@@ -52,7 +52,7 @@ public final class FlanPlugin: NSObject, FlutterPlugin, FlanApi {
       completion(.success)
     } catch {
       completion(
-        .error(
+        .failure(
           FlutterError(
             code: "UNNotificationError",
             message: error.localizedDescription,
@@ -63,7 +63,7 @@ public final class FlanPlugin: NSObject, FlutterPlugin, FlanApi {
   func scheduleNotificationAsync(
     id: String, targetTimestamp: String, content: [String: Any?], repeats: Bool,
     completion: @escaping (Result<Void, Error>) -> Void
-  ) {
+  ) async {
     let notification = UNMutableNotificationContent()
     notification.title = content["title"] as? String ?? ""
     notification.subtitle = content["subtitle"] as? String ?? ""
@@ -71,7 +71,7 @@ public final class FlanPlugin: NSObject, FlutterPlugin, FlanApi {
 
     guard let targetDate = dateFormatter.date(from: targetTimestamp) else {
       completion(
-        .error(
+        .failure(
           PigeonError(
             code: "InvalidArguments",
             message:
@@ -96,7 +96,7 @@ public final class FlanPlugin: NSObject, FlutterPlugin, FlanApi {
       completion(.success)
     } catch {
       completion(
-        .error(
+        .failure(
           (PigeonError(
             code: "UNNotificationError",
             message: error.localizedDescription,
@@ -111,7 +111,7 @@ public final class FlanPlugin: NSObject, FlutterPlugin, FlanApi {
 
   func getScheduledNotificationsAsync(
     completion: @escaping (Result<[[String: Any?]], Error>) -> Void
-  ) {
+  ) async {
     let notificationCenter = UNUserNotificationCenter.current()
     let notificationRequests = await notificationCenter.pendingNotificationRequests()
     let output = notificationRequests.map { Converter.notificationRequestToMap($0) }

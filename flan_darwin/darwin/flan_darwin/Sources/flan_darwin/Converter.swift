@@ -41,7 +41,7 @@ public class Converter {
       "timeSensitiveSetting": notificationSettingToString(settings.timeSensitiveSetting),
       "alertStyle": alertStyleToString(settings.alertStyle),
       "showPreviewsSetting": previewSettingToString(settings.showPreviewsSetting),
-      "providesAppNotificationSettings": settings.providesAppNotificationSettings,
+      "providesAppNotificationSettings": "\(settings.providesAppNotificationSettings)",
       "directMessagesSetting": notificationSettingToString(settings.directMessagesSetting),
     ]
 

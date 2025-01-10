@@ -5,7 +5,7 @@ import UserNotifications
 public final class FlanPlugin: NSObject, FlutterPlugin, FlanDarwinApi {
   private let dateFormatter: ISO8601DateFormatter
 
-  init() {
+  override init() {
     dateFormatter = ISO8601DateFormatter()
     dateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
   }

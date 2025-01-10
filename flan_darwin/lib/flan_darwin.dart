@@ -23,14 +23,14 @@ class FlanDarwin extends FlanPlatform {
 
   @override
   Future<Map<String, String>> getNotificationSettingsAsync() {
-    return _hostApi.getNotificationSettingsAsync();
+    return _hostApi.getNotificationSettings();
   }
 
   @override
   Future<void> requestAuthorizationAsync(
     List<NotificationAuthorizationOptions> options,
   ) {
-    return _hostApi.requestAuthorizationAsync(
+    return _hostApi.requestAuthorization(
       options.map((e) => e.name).toList(),
     );
   }
@@ -42,7 +42,7 @@ class FlanDarwin extends FlanPlatform {
     NotificationContent content, {
     bool repeats = false,
   }) {
-    return _hostApi.scheduleNotificationAsync(
+    return _hostApi.scheduleNotification(
       id,
       target.toIso8601String(),
       content.toMap(),
@@ -57,6 +57,6 @@ class FlanDarwin extends FlanPlatform {
 
   @override
   Future<List<Map<String, dynamic>>> getScheduledNotificationsAsync() {
-    return _hostApi.getScheduledNotificationsAsync();
+    return _hostApi.getScheduledNotifications();
   }
 }

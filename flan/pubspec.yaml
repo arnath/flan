@@ -16,6 +16,7 @@ flutter:
         default_package: flan_darwin
 
 dependencies:
+  flan_darwin: ^0.2.2
   flan_platform_interface: ^0.2.2
   flutter:
     sdk: flutter

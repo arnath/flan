@@ -50,7 +50,7 @@ public final class FlanPlugin: NSObject, FlutterPlugin, FlanDarwinApi {
     Task {
       do {
         try await notificationCenter.requestAuthorization(options: options)
-        completion(.success)
+        completion(.success(()))
       } catch {
         completion(
           .failure(
@@ -96,7 +96,7 @@ public final class FlanPlugin: NSObject, FlutterPlugin, FlanDarwinApi {
     Task {
       do {
         try await notificationCenter.add(request)
-        completion(.success)
+        completion(.success(()))
       } catch {
         completion(
           .failure(

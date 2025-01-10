@@ -1,7 +1,7 @@
 name: flan
 description: Flutter plugin for sending local system-level notifications.
 repository: https://github.com/arnath/flan
-version: 0.2.7
+version: 0.2.8
 
 environment:
   sdk: ^3.5.0

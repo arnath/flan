@@ -39,8 +39,9 @@ class _PigeonCodec extends StandardMessageCodec {
 
 /// The purpose of this Pigeon-defined API is basically to ensure type safety
 /// of the primitive types when going between Dart and Swift and to provide
-/// a slightly cleaner interface. As such, the API uses primitive types in
-/// places of some real Dart types.
+/// a slightly cleaner interface. As such, this is similar to but not the same
+/// as the FlanApi. It replaces a lot of types with primitives supported by the
+/// standard method codec.
 class FlanDarwinApi {
   /// Constructor for [FlanDarwinApi].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
@@ -54,8 +55,8 @@ class FlanDarwinApi {
 
   final String pigeonVar_messageChannelSuffix;
 
-  Future<Map<String, String>> getNotificationSettingsAsync() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flan_darwin.FlanDarwinApi.getNotificationSettingsAsync$pigeonVar_messageChannelSuffix';
+  Future<Map<String, String>> getNotificationSettings() async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flan_darwin.FlanDarwinApi.getNotificationSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -81,8 +82,8 @@ class FlanDarwinApi {
     }
   }
 
-  Future<void> requestAuthorizationAsync(List<String> options) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flan_darwin.FlanDarwinApi.requestAuthorizationAsync$pigeonVar_messageChannelSuffix';
+  Future<void> requestAuthorization(List<String> options) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flan_darwin.FlanDarwinApi.requestAuthorization$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -103,8 +104,8 @@ class FlanDarwinApi {
     }
   }
 
-  Future<void> scheduleNotificationAsync(String id, String targetTimestamp, Map<String, Object?> content, bool repeats) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flan_darwin.FlanDarwinApi.scheduleNotificationAsync$pigeonVar_messageChannelSuffix';
+  Future<void> scheduleNotification(String id, String targetTimestamp, Map<String, Object?> content, bool repeats) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flan_darwin.FlanDarwinApi.scheduleNotification$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -147,8 +148,8 @@ class FlanDarwinApi {
     }
   }
 
-  Future<List<Map<String, Object?>>> getScheduledNotificationsAsync() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flan_darwin.FlanDarwinApi.getScheduledNotificationsAsync$pigeonVar_messageChannelSuffix';
+  Future<List<Map<String, Object?>>> getScheduledNotifications() async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flan_darwin.FlanDarwinApi.getScheduledNotifications$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,

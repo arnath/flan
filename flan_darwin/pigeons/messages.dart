@@ -7,20 +7,21 @@ import 'package:pigeon/pigeon.dart';
 
 /// The purpose of this Pigeon-defined API is basically to ensure type safety
 /// of the primitive types when going between Dart and Swift and to provide
-/// a slightly cleaner interface. As such, the API uses primitive types in
-/// places of some real Dart types.
+/// a slightly cleaner interface. As such, this is similar to but not the same
+/// as the FlanApi. It replaces a lot of types with primitives supported by the
+/// standard method codec.
 @HostApi()
 abstract class FlanDarwinApi {
   @async
-  Map<String, String> getNotificationSettingsAsync();
+  Map<String, String> getNotificationSettings();
 
   @async
-  void requestAuthorizationAsync(
+  void requestAuthorization(
     List<String> options,
   );
 
   @async
-  void scheduleNotificationAsync(
+  void scheduleNotification(
     String id,
     String targetTimestamp,
     Map<String, Object?> content,
@@ -30,5 +31,5 @@ abstract class FlanDarwinApi {
   void cancelNotifications(List<String> ids);
 
   @async
-  List<Map<String, Object?>> getScheduledNotificationsAsync();
+  List<Map<String, Object?>> getScheduledNotifications();
 }

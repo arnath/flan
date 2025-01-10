@@ -11,16 +11,16 @@ public final class FlanPlugin: NSObject, FlutterPlugin, FlanDarwinApi {
     registrar.publish(plugin)
   }
 
-  func getNotificationSettingsAsync(completion: @escaping (Result<[String: String], Error>) -> Void) async
-  {
+  func getNotificationSettings(completion: @escaping (Result<[String: String], Error>) -> Void) {
     let notificationCenter = UNUserNotificationCenter.current()
-    let settings = await notificationCenter.notificationSettings()
-    completion(.success(Converter.notificationSettingsToMap(settings)))
+    Task {
+      let settings = await notificationCenter.notificationSettings()
+      completion(.success(Converter.notificationSettingsToMap(settings)))
+    }
   }
 
-  func requestAuthorizationAsync(
-    options: [String], completion: @escaping (Result<Void, Error>) -> Void
-  ) async {
+  func requestAuthorization(options: [String], completion: @escaping (Result<Void, Error>) -> Void)
+  {
     let options: UNAuthorizationOptions = options.reduce([]) { partialOptions, option in
       switch option {
       case "badge":
@@ -47,23 +47,25 @@ public final class FlanPlugin: NSObject, FlutterPlugin, FlanDarwinApi {
     }
 
     let notificationCenter = UNUserNotificationCenter.current()
-    do {
-      try await notificationCenter.requestAuthorization(options: options)
-      completion(.success)
-    } catch {
-      completion(
-        .failure(
-          FlutterError(
-            code: "UNNotificationError",
-            message: error.localizedDescription,
-            details: nil)))
+    Task {
+      do {
+        try await notificationCenter.requestAuthorization(options: options)
+        completion(.success)
+      } catch {
+        completion(
+          .failure(
+            FlutterError(
+              code: "UNNotificationError",
+              message: error.localizedDescription,
+              details: nil)))
+      }
     }
   }
 
-  func scheduleNotificationAsync(
+  func scheduleNotification(
     id: String, targetTimestamp: String, content: [String: Any?], repeats: Bool,
     completion: @escaping (Result<Void, Error>) -> Void
-  ) async {
+  ) {
     let notification = UNMutableNotificationContent()
     notification.title = content["title"] as? String ?? ""
     notification.subtitle = content["subtitle"] as? String ?? ""
@@ -91,16 +93,18 @@ public final class FlanPlugin: NSObject, FlutterPlugin, FlanDarwinApi {
     )
 
     let notificationCenter = UNUserNotificationCenter.current()
-    do {
-      try await notificationCenter.add(request)
-      completion(.success)
-    } catch {
-      completion(
-        .failure(
-          (PigeonError(
-            code: "UNNotificationError",
-            message: error.localizedDescription,
-            details: nil))))
+    Task {
+      do {
+        try await notificationCenter.add(request)
+        completion(.success)
+      } catch {
+        completion(
+          .failure(
+            (PigeonError(
+              code: "UNNotificationError",
+              message: error.localizedDescription,
+              details: nil))))
+      }
     }
   }
 
@@ -109,13 +113,13 @@ public final class FlanPlugin: NSObject, FlutterPlugin, FlanDarwinApi {
     notificationCenter.removePendingNotificationRequests(withIdentifiers: ids)
   }
 
-  func getScheduledNotificationsAsync(
-    completion: @escaping (Result<[[String: Any?]], Error>) -> Void
-  ) async {
+  func getScheduledNotifications(completion: @escaping (Result<[[String: Any?]], Error>) -> Void) {
     let notificationCenter = UNUserNotificationCenter.current()
-    let notificationRequests = await notificationCenter.pendingNotificationRequests()
-    let output = notificationRequests.map { Converter.notificationRequestToMap($0) }
+    Task {
+      let notificationRequests = await notificationCenter.pendingNotificationRequests()
+      let output = notificationRequests.map { Converter.notificationRequestToMap($0) }
 
-    completion(.success(output))
+      completion(.success(output))
+    }
   }
 }

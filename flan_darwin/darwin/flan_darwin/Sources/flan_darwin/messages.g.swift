@@ -87,16 +87,17 @@ class MessagesPigeonCodec: FlutterStandardMessageCodec, @unchecked Sendable {
 
 /// The purpose of this Pigeon-defined API is basically to ensure type safety
 /// of the primitive types when going between Dart and Swift and to provide
-/// a slightly cleaner interface. As such, the API uses primitive types in
-/// places of some real Dart types.
+/// a slightly cleaner interface. As such, this is similar to but not the same
+/// as the FlanApi. It replaces a lot of types with primitives supported by the
+/// standard method codec.
 ///
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol FlanDarwinApi {
-  func getNotificationSettingsAsync(completion: @escaping (Result<[String: String], Error>) -> Void)
-  func requestAuthorizationAsync(options: [String], completion: @escaping (Result<Void, Error>) -> Void)
-  func scheduleNotificationAsync(id: String, targetTimestamp: String, content: [String: Any?], repeats: Bool, completion: @escaping (Result<Void, Error>) -> Void)
+  func getNotificationSettings(completion: @escaping (Result<[String: String], Error>) -> Void)
+  func requestAuthorization(options: [String], completion: @escaping (Result<Void, Error>) -> Void)
+  func scheduleNotification(id: String, targetTimestamp: String, content: [String: Any?], repeats: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func cancelNotifications(ids: [String]) throws
-  func getScheduledNotificationsAsync(completion: @escaping (Result<[[String: Any?]], Error>) -> Void)
+  func getScheduledNotifications(completion: @escaping (Result<[[String: Any?]], Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -105,10 +106,10 @@ class FlanDarwinApiSetup {
   /// Sets up an instance of `FlanDarwinApi` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: FlanDarwinApi?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let getNotificationSettingsAsyncChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flan_darwin.FlanDarwinApi.getNotificationSettingsAsync\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getNotificationSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flan_darwin.FlanDarwinApi.getNotificationSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      getNotificationSettingsAsyncChannel.setMessageHandler { _, reply in
-        api.getNotificationSettingsAsync { result in
+      getNotificationSettingsChannel.setMessageHandler { _, reply in
+        api.getNotificationSettings { result in
           switch result {
           case .success(let res):
             reply(wrapResult(res))
@@ -118,14 +119,14 @@ class FlanDarwinApiSetup {
         }
       }
     } else {
-      getNotificationSettingsAsyncChannel.setMessageHandler(nil)
+      getNotificationSettingsChannel.setMessageHandler(nil)
     }
-    let requestAuthorizationAsyncChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flan_darwin.FlanDarwinApi.requestAuthorizationAsync\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let requestAuthorizationChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flan_darwin.FlanDarwinApi.requestAuthorization\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      requestAuthorizationAsyncChannel.setMessageHandler { message, reply in
+      requestAuthorizationChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let optionsArg = args[0] as! [String]
-        api.requestAuthorizationAsync(options: optionsArg) { result in
+        api.requestAuthorization(options: optionsArg) { result in
           switch result {
           case .success:
             reply(wrapResult(nil))
@@ -135,17 +136,17 @@ class FlanDarwinApiSetup {
         }
       }
     } else {
-      requestAuthorizationAsyncChannel.setMessageHandler(nil)
+      requestAuthorizationChannel.setMessageHandler(nil)
     }
-    let scheduleNotificationAsyncChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flan_darwin.FlanDarwinApi.scheduleNotificationAsync\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let scheduleNotificationChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flan_darwin.FlanDarwinApi.scheduleNotification\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      scheduleNotificationAsyncChannel.setMessageHandler { message, reply in
+      scheduleNotificationChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let idArg = args[0] as! String
         let targetTimestampArg = args[1] as! String
         let contentArg = args[2] as! [String: Any?]
         let repeatsArg = args[3] as! Bool
-        api.scheduleNotificationAsync(id: idArg, targetTimestamp: targetTimestampArg, content: contentArg, repeats: repeatsArg) { result in
+        api.scheduleNotification(id: idArg, targetTimestamp: targetTimestampArg, content: contentArg, repeats: repeatsArg) { result in
           switch result {
           case .success:
             reply(wrapResult(nil))
@@ -155,7 +156,7 @@ class FlanDarwinApiSetup {
         }
       }
     } else {
-      scheduleNotificationAsyncChannel.setMessageHandler(nil)
+      scheduleNotificationChannel.setMessageHandler(nil)
     }
     let cancelNotificationsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flan_darwin.FlanDarwinApi.cancelNotifications\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
@@ -172,10 +173,10 @@ class FlanDarwinApiSetup {
     } else {
       cancelNotificationsChannel.setMessageHandler(nil)
     }
-    let getScheduledNotificationsAsyncChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flan_darwin.FlanDarwinApi.getScheduledNotificationsAsync\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getScheduledNotificationsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flan_darwin.FlanDarwinApi.getScheduledNotifications\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      getScheduledNotificationsAsyncChannel.setMessageHandler { _, reply in
-        api.getScheduledNotificationsAsync { result in
+      getScheduledNotificationsChannel.setMessageHandler { _, reply in
+        api.getScheduledNotifications { result in
           switch result {
           case .success(let res):
             reply(wrapResult(res))
@@ -185,7 +186,7 @@ class FlanDarwinApiSetup {
         }
       }
     } else {
-      getScheduledNotificationsAsyncChannel.setMessageHandler(nil)
+      getScheduledNotificationsChannel.setMessageHandler(nil)
     }
   }
 }

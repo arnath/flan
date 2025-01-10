@@ -1,7 +1,7 @@
 name: flan_platform_interface
 description: A common platform interface for the flan plugin.
 repository: https://github.com/arnath/flan
-version: 0.2.4
+version: 0.2.5
 
 environment:
   sdk: ^3.5.0

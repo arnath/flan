@@ -44,7 +44,7 @@ class FlanDarwin extends FlanPlatform {
   }) {
     return _hostApi.scheduleNotification(
       id,
-      target.toIso8601String(),
+      target.millisecondsSinceEpoch / 1000,
       content.toMap(),
       repeats,
     );

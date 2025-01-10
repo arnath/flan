@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flan: ^0.2.10
+  flan: ^0.2.11
   get_it: ^8.0.3
   ksuid: ^1.0.0
 

@@ -104,7 +104,7 @@ class FlanDarwinApi {
     }
   }
 
-  Future<void> scheduleNotification(String id, String targetTimestamp, Map<String, Object?> content, bool repeats) async {
+  Future<void> scheduleNotification(String id, double targetEpochSeconds, Map<String, Object?> content, bool repeats) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.flan_darwin.FlanDarwinApi.scheduleNotification$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -112,7 +112,7 @@ class FlanDarwinApi {
       binaryMessenger: pigeonVar_binaryMessenger,
     );
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[id, targetTimestamp, content, repeats]) as List<Object?>?;
+        await pigeonVar_channel.send(<Object?>[id, targetEpochSeconds, content, repeats]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {

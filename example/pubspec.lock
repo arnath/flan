@@ -49,6 +49,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
+  flan:
+    dependency: "direct main"
+    description:
+      name: flan
+      sha256: f176bbae03048e97986a59e08aefaf86db1b8273cbcc56dce6ac4da1cf3d8205
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.2"
+  flan_darwin:
+    dependency: transitive
+    description:
+      name: flan_darwin
+      sha256: a8afe141bbe7f7dbda921d54fa24925791508b14af04c1af2d404ec0c70a39d4
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.2"
+  flan_platform_interface:
+    dependency: transitive
+    description:
+      name: flan_platform_interface
+      sha256: f762ba27ed1970b793e2ba6b08f216686581a00bfc275a1e929f8a56de3f33b3
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -131,6 +155,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.0"
+  plugin_platform_interface:
+    dependency: transitive
+    description:
+      name: plugin_platform_interface
+      sha256: "4820fbfdb9478b1ebae27888254d445073732dae3d6ea81f0b7e06d5dedc3f02"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.8"
   sky_engine:
     dependency: transitive
     description: flutter

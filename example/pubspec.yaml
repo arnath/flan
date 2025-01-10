@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flan: ^0.2.3
+  flan: ^0.2.4
 
 dev_dependencies:
   flutter_test:

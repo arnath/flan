@@ -67,13 +67,23 @@ public final class FlanPlugin: NSObject, FlutterPlugin, FlanDarwinApi {
     }
   }
 
-  func scheduleNotification(id: String, targetEpochSeconds: Int64, content: [String: Any?], repeats: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
+  func scheduleNotification(id: String, targetEpochSeconds: String, content: [String: Any?], repeats: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
     let notification = UNMutableNotificationContent()
     notification.title = content["title"] as? String ?? ""
     notification.subtitle = content["subtitle"] as? String ?? ""
     notification.body = content["body"] as? String ?? ""
 
-    let targetDate = Date(timeIntervalSince1970: Double(targetEpochSeconds))
+    guard let targetEpochSeconds = Double(targetEpochSeconds) else {
+      completion(
+        .failure(
+          PigeonError(
+            code: "InvalidArguments",
+            message: "Invalid argument 'targetEpochSeconds' provided.",
+            details: nil)))
+      return
+    }
+
+    let targetDate = Date(timeIntervalSince1970: targetEpochSeconds)
     let dateComponents = Calendar.current.dateComponents(
       [.year, .month, .day, .hour, .minute, .second], from: targetDate)
     let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: repeats)

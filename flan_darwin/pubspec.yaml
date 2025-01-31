@@ -1,0 +1,29 @@
+name: flan_darwin
+description: Shared Darwin (iOS/MacOS) implementation of the flan plugin.
+repository: https://github.com/arnath/flan
+version: 0.2.14
+
+environment:
+  sdk: ^3.5.0
+  # Flutter versions prior to 3.7 did not support the
+  # sharedDarwinSource option.
+  flutter: ">=3.7.0"
+
+flutter:
+  plugin:
+    implements: flan
+    platforms:
+      ios:
+        pluginClass: FlanPlugin
+        dartPluginClass: FlanDarwin
+        sharedDarwinSource: true
+
+dependencies:
+  flan_platform_interface: ^0.2.14
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  pigeon: ^22.7.2

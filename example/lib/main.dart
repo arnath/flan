@@ -1,13 +1,10 @@
 import 'package:flan/flan.dart';
-import 'package:flan/flan_method_channel.dart';
-import 'package:flan/models/notification_authorization_options.dart';
-import 'package:flan/models/notification_content.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ksuid/ksuid.dart';
 
 void main() {
-  GetIt.instance.registerSingleton<Flan>(FlanMethodChannel(token: Object()));
+  GetIt.instance.registerSingleton<FlanApi>(FlanPlatformApi());
   runApp(const FlanExampleApp());
 }
 
@@ -19,7 +16,7 @@ class FlanExampleApp extends StatefulWidget {
 }
 
 class _FlanExampleAppState extends State<FlanExampleApp> {
-  static final Flan _flan = GetIt.instance<Flan>();
+  static final FlanApi _flan = GetIt.instance<FlanApi>();
 
   @override
   void initState() {
@@ -31,7 +28,7 @@ class _FlanExampleAppState extends State<FlanExampleApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('Flan example app'),
         ),
         body: Center(
           child: Column(
@@ -65,10 +62,10 @@ class _FlanExampleAppState extends State<FlanExampleApp> {
                 },
               ),
               OutlinedButton(
-                  child: Text('Get notification settings'),
-                  onPressed: () async {
-                    print(await _flan.getNotificationSettingsAsync());
-                  })
+                child: Text('Print notification settings'),
+                onPressed: () async =>
+                    _flan.getNotificationSettingsAsync().then(print),
+              )
             ],
           ),
         ),

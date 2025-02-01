@@ -77,6 +77,7 @@ public final class FlanPlugin: NSObject, FlutterPlugin, FlanDarwinApi {
         notification.subtitle = content["subtitle"] as? String ?? ""
         notification.body = content["body"] as? String ?? ""
         notification.sound = UNNotificationSound.default
+        notification.interruptionLevel = UNNotificationInterruptionLevel.timeSensitive
 
         guard let targetEpochSeconds = Double(targetEpochSeconds) else {
             completion(

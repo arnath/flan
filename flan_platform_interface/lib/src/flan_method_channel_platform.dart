@@ -21,13 +21,15 @@ class FlanMethodChannelPlatform extends FlanPlatform {
   }
 
   @override
-  Future<void> requestAuthorizationAsync(
+  Future<bool> requestAuthorizationAsync(
     List<NotificationAuthorizationOptions> options,
   ) async {
-    await methodChannel.invokeMethod(
+    var result = await methodChannel.invokeMethod(
       'requestAuthorizationAsync',
       {'options': options.map((e) => e.name).toList()},
     );
+
+    return result!;
   }
 
   @override

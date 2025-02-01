@@ -16,7 +16,7 @@ abstract class FlanDarwinApi {
   Map<String, String> getNotificationSettings();
 
   @async
-  void requestAuthorization(
+  bool requestAuthorization(
     List<String> options,
   );
 

@@ -94,7 +94,7 @@ class MessagesPigeonCodec: FlutterStandardMessageCodec, @unchecked Sendable {
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol FlanDarwinApi {
   func getNotificationSettings(completion: @escaping (Result<[String: String], Error>) -> Void)
-  func requestAuthorization(options: [String], completion: @escaping (Result<Void, Error>) -> Void)
+  func requestAuthorization(options: [String], completion: @escaping (Result<Bool, Error>) -> Void)
   func scheduleNotification(id: String, targetEpochSeconds: String, content: [String: Any?], repeats: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func cancelNotifications(ids: [String]) throws
   func getScheduledNotifications(completion: @escaping (Result<[[String: Any?]], Error>) -> Void)
@@ -128,8 +128,8 @@ class FlanDarwinApiSetup {
         let optionsArg = args[0] as! [String]
         api.requestAuthorization(options: optionsArg) { result in
           switch result {
-          case .success:
-            reply(wrapResult(nil))
+          case .success(let res):
+            reply(wrapResult(res))
           case .failure(let error):
             reply(wrapError(error))
           }

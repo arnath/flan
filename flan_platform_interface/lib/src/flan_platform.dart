@@ -40,7 +40,7 @@ abstract class FlanPlatform extends PlatformInterface implements FlanApi {
       );
 
   @override
-  Future<void> requestAuthorizationAsync(
+  Future<bool> requestAuthorizationAsync(
     List<NotificationAuthorizationOptions> options,
   ) =>
       throw UnimplementedError(

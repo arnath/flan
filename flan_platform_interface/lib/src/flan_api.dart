@@ -10,7 +10,9 @@ abstract interface class FlanApi {
   /// [options] specifies the types of notifications the application wants to send.
   /// Each option is an instance of [NotificationAuthorizationOptions]. Options must
   /// not be specified more than once.
-  Future<void> requestAuthorizationAsync(
+  ///
+  /// Returns a bool indicating whether authorization was granted.
+  Future<bool> requestAuthorizationAsync(
     List<NotificationAuthorizationOptions> options,
   );
 

@@ -55,8 +55,8 @@ public final class FlanPlugin: NSObject, FlutterPlugin, FlanDarwinApi {
         let notificationCenter = UNUserNotificationCenter.current()
         Task {
             do {
-                try await notificationCenter.requestAuthorization(options: options)
-                completion(.success(()))
+                let granted = try await notificationCenter.requestAuthorization(options: options)
+                completion(.success((granted)))
             } catch {
                 completion(
                     .failure(

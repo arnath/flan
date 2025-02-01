@@ -17,7 +17,7 @@ class FlanPlatformApi implements FlanApi {
   }
 
   @override
-  Future<void> requestAuthorizationAsync(
+  Future<bool> requestAuthorizationAsync(
     List<NotificationAuthorizationOptions> options,
   ) {
     return FlanPlatform.instance.requestAuthorizationAsync(options);

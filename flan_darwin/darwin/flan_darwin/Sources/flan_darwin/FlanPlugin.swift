@@ -70,14 +70,16 @@ public final class FlanPlugin: NSObject, FlutterPlugin, FlanDarwinApi {
 
     func scheduleNotification(
         id: String, targetEpochSeconds: String, content: [String: Any?], repeats: Bool,
-        completion: @escaping (Result<Void, Error>) -> Void
+        timeSensitive: Bool, completion: @escaping (Result<Void, Error>) -> Void
     ) {
         let notification = UNMutableNotificationContent()
         notification.title = content["title"] as? String ?? ""
         notification.subtitle = content["subtitle"] as? String ?? ""
         notification.body = content["body"] as? String ?? ""
         notification.sound = UNNotificationSound.default
-        notification.interruptionLevel = UNNotificationInterruptionLevel.timeSensitive
+        if timeSensitive {
+            notification.interruptionLevel = UNNotificationInterruptionLevel.timeSensitive
+        }
 
         guard let targetEpochSeconds = Double(targetEpochSeconds) else {
             completion(

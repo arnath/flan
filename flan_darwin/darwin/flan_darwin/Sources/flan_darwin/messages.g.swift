@@ -95,7 +95,7 @@ class MessagesPigeonCodec: FlutterStandardMessageCodec, @unchecked Sendable {
 protocol FlanDarwinApi {
   func getNotificationSettings(completion: @escaping (Result<[String: String], Error>) -> Void)
   func requestAuthorization(options: [String], completion: @escaping (Result<Bool, Error>) -> Void)
-  func scheduleNotification(id: String, targetEpochSeconds: String, content: [String: Any?], repeats: Bool, completion: @escaping (Result<Void, Error>) -> Void)
+  func scheduleNotification(id: String, targetEpochSeconds: String, content: [String: Any?], repeats: Bool, timeSensitive: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func cancelNotifications(ids: [String]) throws
   func getScheduledNotifications(completion: @escaping (Result<[[String: Any?]], Error>) -> Void)
 }
@@ -146,7 +146,8 @@ class FlanDarwinApiSetup {
         let targetEpochSecondsArg = args[1] as! String
         let contentArg = args[2] as! [String: Any?]
         let repeatsArg = args[3] as! Bool
-        api.scheduleNotification(id: idArg, targetEpochSeconds: targetEpochSecondsArg, content: contentArg, repeats: repeatsArg) { result in
+        let timeSensitiveArg = args[4] as! Bool
+        api.scheduleNotification(id: idArg, targetEpochSeconds: targetEpochSecondsArg, content: contentArg, repeats: repeatsArg, timeSensitive: timeSensitiveArg) { result in
           switch result {
           case .success:
             reply(wrapResult(nil))

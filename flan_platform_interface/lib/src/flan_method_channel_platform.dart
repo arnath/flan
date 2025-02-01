@@ -38,6 +38,7 @@ class FlanMethodChannelPlatform extends FlanPlatform {
     DateTime target,
     NotificationContent content, {
     bool repeats = false,
+    bool timeSensitive = false,
   }) async {
     await methodChannel.invokeMethod(
       'scheduleNotificationAsync',
@@ -46,6 +47,7 @@ class FlanMethodChannelPlatform extends FlanPlatform {
         'content': content.toMap(),
         'targetEpochSeconds': target.millisecondsSinceEpoch / 1000,
         'repeats': repeats,
+        'timeSensitive': timeSensitive,
       },
     );
   }

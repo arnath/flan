@@ -25,7 +25,7 @@ public final class FlanPlugin: NSObject, FlutterPlugin, FlanDarwinApi {
     }
 
     func requestAuthorization(
-        options: [String], completion: @escaping (Result<Void, Error>) -> Void
+        options: [String], completion: @escaping (Result<Bool, Error>) -> Void
     ) {
         let options: UNAuthorizationOptions = options.reduce([]) { partialOptions, option in
             switch option {

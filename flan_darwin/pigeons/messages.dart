@@ -26,6 +26,7 @@ abstract class FlanDarwinApi {
     String targetEpochSeconds,
     Map<String, Object?> content,
     bool repeats,
+    bool timeSensitive,
   );
 
   void cancelNotifications(List<String> ids);

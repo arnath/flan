@@ -61,26 +61,26 @@ packages:
     dependency: "direct main"
     description:
       name: flan
-      sha256: "55f2835a6786f90ee4a3033b33a574c5680516c8d2377d75d06aaecb820d9cbe"
+      sha256: "94e0cfbc6819d3bb13f89723922027f878468fa11f4163a000d995d1090701d1"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.16"
+    version: "0.2.17"
   flan_darwin:
     dependency: transitive
     description:
       name: flan_darwin
-      sha256: "7c738cf26d5ae0c532ea3eb971c76685b08e76c742fc745c264bcf61412780d7"
+      sha256: e45d77f07cbbbef3974ca443f028d71d9cee937276e4d0bcd85a9baa9ad813e8
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.16"
+    version: "0.2.17"
   flan_platform_interface:
     dependency: transitive
     description:
       name: flan_platform_interface
-      sha256: "47e9792c4edee63bf6cf77fbbc23594849e4c73b53a0d3768516d88e6a3a41c5"
+      sha256: e155b1617624d1ea6ca219136b7d1b25ead6882528a6ed28f176142c15ffc4f5
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.16"
+    version: "0.2.17"
   flutter:
     dependency: "direct main"
     description: flutter

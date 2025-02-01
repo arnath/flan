@@ -29,12 +29,14 @@ class FlanPlatformApi implements FlanApi {
     DateTime target,
     NotificationContent content, {
     bool repeats = false,
+    bool timeSensitive = false,
   }) {
     return FlanPlatform.instance.scheduleNotificationAsync(
       id,
       target,
       content,
       repeats: repeats,
+      timeSensitive: timeSensitive,
     );
   }
 }

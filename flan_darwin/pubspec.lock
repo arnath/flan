@@ -146,10 +146,10 @@ packages:
     dependency: "direct main"
     description:
       name: flan_platform_interface
-      sha256: "47e9792c4edee63bf6cf77fbbc23594849e4c73b53a0d3768516d88e6a3a41c5"
+      sha256: e155b1617624d1ea6ca219136b7d1b25ead6882528a6ed28f176142c15ffc4f5
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.16"
+    version: "0.2.17"
   flutter:
     dependency: "direct main"
     description: flutter

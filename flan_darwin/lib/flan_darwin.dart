@@ -27,7 +27,7 @@ class FlanDarwin extends FlanPlatform {
   }
 
   @override
-  Future<void> requestAuthorizationAsync(
+  Future<bool> requestAuthorizationAsync(
     List<NotificationAuthorizationOptions> options,
   ) {
     return _hostApi.requestAuthorization(

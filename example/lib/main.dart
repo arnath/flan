@@ -18,6 +18,8 @@ class FlanExampleApp extends StatefulWidget {
 class _FlanExampleAppState extends State<FlanExampleApp> {
   static final FlanApi _flan = GetIt.instance<FlanApi>();
 
+  bool? authorized;
+
   @override
   void initState() {
     super.initState();
@@ -34,14 +36,16 @@ class _FlanExampleAppState extends State<FlanExampleApp> {
           child: Column(
             spacing: 8,
             children: [
+              Text('Authorization status: ${authorized ?? 'Unknown'}'),
               OutlinedButton(
                 child: Text('Request notification authorization'),
                 onPressed: () async {
-                  await _flan.requestAuthorizationAsync(
+                  var result = await _flan.requestAuthorizationAsync(
                     [
                       NotificationAuthorizationOptions.alert,
                     ],
                   );
+                  setState(() => authorized = result);
                 },
               ),
               OutlinedButton(

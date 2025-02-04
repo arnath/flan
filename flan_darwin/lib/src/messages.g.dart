@@ -82,7 +82,7 @@ class FlanDarwinApi {
     }
   }
 
-  Future<void> requestAuthorization(List<String> options) async {
+  Future<bool> requestAuthorization(List<String> options) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.flan_darwin.FlanDarwinApi.requestAuthorization$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -99,12 +99,17 @@ class FlanDarwinApi {
         message: pigeonVar_replyList[1] as String?,
         details: pigeonVar_replyList[2],
       );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
     } else {
-      return;
+      return (pigeonVar_replyList[0] as bool?)!;
     }
   }
 
-  Future<void> scheduleNotification(String id, String targetEpochSeconds, Map<String, Object?> content, bool repeats) async {
+  Future<void> scheduleNotification(String id, String targetEpochSeconds, Map<String, Object?> content, bool repeats, bool timeSensitive) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.flan_darwin.FlanDarwinApi.scheduleNotification$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -112,7 +117,7 @@ class FlanDarwinApi {
       binaryMessenger: pigeonVar_binaryMessenger,
     );
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[id, targetEpochSeconds, content, repeats]) as List<Object?>?;
+        await pigeonVar_channel.send(<Object?>[id, targetEpochSeconds, content, repeats, timeSensitive]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {

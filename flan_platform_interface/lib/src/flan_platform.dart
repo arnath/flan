@@ -40,7 +40,7 @@ abstract class FlanPlatform extends PlatformInterface implements FlanApi {
       );
 
   @override
-  Future<void> requestAuthorizationAsync(
+  Future<bool> requestAuthorizationAsync(
     List<NotificationAuthorizationOptions> options,
   ) =>
       throw UnimplementedError(
@@ -53,6 +53,7 @@ abstract class FlanPlatform extends PlatformInterface implements FlanApi {
     DateTime target,
     NotificationContent content, {
     bool repeats = false,
+    bool timeSensitive = false,
   }) =>
       throw UnimplementedError(
         'scheduleNotificationAsync() has not been implemented.',

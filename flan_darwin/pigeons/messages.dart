@@ -16,7 +16,7 @@ abstract class FlanDarwinApi {
   Map<String, String> getNotificationSettings();
 
   @async
-  void requestAuthorization(
+  bool requestAuthorization(
     List<String> options,
   );
 
@@ -26,6 +26,7 @@ abstract class FlanDarwinApi {
     String targetEpochSeconds,
     Map<String, Object?> content,
     bool repeats,
+    bool timeSensitive,
   );
 
   void cancelNotifications(List<String> ids);

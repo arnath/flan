@@ -27,7 +27,7 @@ class FlanDarwin extends FlanPlatform {
   }
 
   @override
-  Future<void> requestAuthorizationAsync(
+  Future<bool> requestAuthorizationAsync(
     List<NotificationAuthorizationOptions> options,
   ) {
     return _hostApi.requestAuthorization(
@@ -41,12 +41,14 @@ class FlanDarwin extends FlanPlatform {
     DateTime target,
     NotificationContent content, {
     bool repeats = false,
+    bool timeSensitive = false,
   }) {
     return _hostApi.scheduleNotification(
       id,
       (target.millisecondsSinceEpoch ~/ 1000).toString(),
       content.toMap(),
       repeats,
+      timeSensitive,
     );
   }
 

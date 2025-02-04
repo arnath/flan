@@ -25,7 +25,7 @@ public final class FlanPlugin: NSObject, FlutterPlugin, FlanDarwinApi {
     }
 
     func requestAuthorization(
-        options: [String], completion: @escaping (Result<Void, Error>) -> Void
+        options: [String], completion: @escaping (Result<Bool, Error>) -> Void
     ) {
         let options: UNAuthorizationOptions = options.reduce([]) { partialOptions, option in
             switch option {
@@ -55,8 +55,8 @@ public final class FlanPlugin: NSObject, FlutterPlugin, FlanDarwinApi {
         let notificationCenter = UNUserNotificationCenter.current()
         Task {
             do {
-                try await notificationCenter.requestAuthorization(options: options)
-                completion(.success(()))
+                let granted = try await notificationCenter.requestAuthorization(options: options)
+                completion(.success((granted)))
             } catch {
                 completion(
                     .failure(
@@ -70,13 +70,16 @@ public final class FlanPlugin: NSObject, FlutterPlugin, FlanDarwinApi {
 
     func scheduleNotification(
         id: String, targetEpochSeconds: String, content: [String: Any?], repeats: Bool,
-        completion: @escaping (Result<Void, Error>) -> Void
+        timeSensitive: Bool, completion: @escaping (Result<Void, Error>) -> Void
     ) {
         let notification = UNMutableNotificationContent()
         notification.title = content["title"] as? String ?? ""
         notification.subtitle = content["subtitle"] as? String ?? ""
         notification.body = content["body"] as? String ?? ""
         notification.sound = UNNotificationSound.default
+        if timeSensitive {
+            notification.interruptionLevel = UNNotificationInterruptionLevel.timeSensitive
+        }
 
         guard let targetEpochSeconds = Double(targetEpochSeconds) else {
             completion(

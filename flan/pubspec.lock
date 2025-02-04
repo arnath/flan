@@ -53,18 +53,18 @@ packages:
     dependency: "direct main"
     description:
       name: flan_darwin
-      sha256: fbea752afd6c07b4f19b5177eb9d1ea40c0841669ca1f07d6fe584b1d14d3e44
+      sha256: "609e0f71c274ce20a0210bef5210d8de65d909c4ef0b69d46fe82cc2b3596250"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.15"
+    version: "0.2.18"
   flan_platform_interface:
     dependency: "direct main"
     description:
       name: flan_platform_interface
-      sha256: "39eb3823c4e53f00319f25a7c0465c514f3d88ee180296ca39aafef59d2a6149"
+      sha256: "9682be16bb7975e7a8fd5801a03eb4ba4d5774a3c95bf40372ae0674b5580291"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.15"
+    version: "0.2.18"
   flutter:
     dependency: "direct main"
     description: flutter

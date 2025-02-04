@@ -10,7 +10,9 @@ abstract interface class FlanApi {
   /// [options] specifies the types of notifications the application wants to send.
   /// Each option is an instance of [NotificationAuthorizationOptions]. Options must
   /// not be specified more than once.
-  Future<void> requestAuthorizationAsync(
+  ///
+  /// Returns a bool indicating whether authorization was granted.
+  Future<bool> requestAuthorizationAsync(
     List<NotificationAuthorizationOptions> options,
   );
 
@@ -20,11 +22,14 @@ abstract interface class FlanApi {
   /// [target] specifies the delivery time for the notification.
   /// [content] contains the details of the notification, such as title and body.
   /// [repeats] indicates whether the notification should repeat. Defaults to `false`.
+  /// [timeSensitive] indicates whether the notification should be marked as time
+  ///   sensitive. Note that this is not the same as critical. Defaults to `false`.
   Future<void> scheduleNotificationAsync(
     String id,
     DateTime target,
     NotificationContent content, {
     bool repeats = false,
+    bool timeSensitive = false,
   });
 
   /// Cancels notifications with the specified [ids].
